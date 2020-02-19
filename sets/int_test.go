@@ -112,3 +112,16 @@ func TestIntSetEquals(t *testing.T) {
 		t.Error("{1 2}.Equals({1 2}) got: false - want: true")
 	}
 }
+
+func TestIntSetUnion(t *testing.T) {
+	a := NewIntSet()
+	b := NewIntSet()
+	if r := a.Union(b); !r.Equals(NewIntSet()) {
+		t.Errorf("{}.Union({}) got: %v - want: {}", r)
+	}
+	a.Add(1, 2)
+	b.Add(2, 3)
+	if r := a.Union(b); !r.Equals(NewIntSet(1, 2, 3)) {
+		t.Errorf("{1 2}.Union({2 3}) got: %v - want: {1 2 3}", r)
+	}
+}

@@ -79,6 +79,17 @@ func (s IntSet) Equals(t IntSet) bool {
 	return len(r) == 0
 }
 
+func (s IntSet) Union(t IntSet) IntSet {
+	r := make(IntSet, len(s)+len(t))
+	for e := range s {
+		r[e] = struct{}{}
+	}
+	for e := range t {
+		r[e] = struct{}{}
+	}
+	return r
+}
+
 func NewIntSet(elems ...int) IntSet {
 	s := make(IntSet, len(elems))
 	for _, e := range elems {
