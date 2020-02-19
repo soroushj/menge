@@ -2,7 +2,7 @@ package sets
 
 import "testing"
 
-func TestIntSet(t *testing.T) {
+func TestIntSetBasics(t *testing.T) {
 	// NewIntSet() -> {}
 	s := NewIntSet()
 	if s.Has(1) {
@@ -69,5 +69,26 @@ func TestIntSet(t *testing.T) {
 	s.Clear()
 	if !s.IsEmpty() {
 		t.Error("NewIntSet() Add(1, 2, 1) Remove(2, 2) Clear() Clear() IsEmpty() got: false - want: true - expected set: {}")
+	}
+}
+
+func TestIntSetEquals(t *testing.T) {
+	a := NewIntSet()
+	b := NewIntSet()
+	if !a.Equals(b) {
+		t.Error("{}.Equals({}) got: false - want: true")
+	}
+	a.Add(1)
+	b.Add(2)
+	if a.Equals(b) {
+		t.Error("{1}.Equals({2}) got: true - want: false")
+	}
+	a.Add(2)
+	if a.Equals(b) {
+		t.Error("{1 2}.Equals({2}) got: true - want: false")
+	}
+	b.Add(1)
+	if !a.Equals(b) {
+		t.Error("{1 2}.Equals({1 2}) got: false - want: true")
 	}
 }

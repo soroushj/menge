@@ -65,6 +65,20 @@ func (s IntSet) String() string {
 	return b.String()
 }
 
+func (s IntSet) Equals(t IntSet) bool {
+	if len(s) != len(t) {
+		return false
+	}
+	r := make(IntSet, len(s))
+	for e := range s {
+		r[e] = struct{}{}
+	}
+	for e := range t {
+		delete(r, e)
+	}
+	return len(r) == 0
+}
+
 func NewIntSet() IntSet {
 	return make(IntSet)
 }
