@@ -163,6 +163,22 @@ func TestIntSetDifference(t *testing.T) {
 	}
 }
 
+func TestIntSetIsSubsetOf(t *testing.T) {
+	a := NewIntSet()
+	b := NewIntSet()
+	if !a.IsSubsetOf(b) {
+		t.Errorf("%v.IsSubsetOf(%v) got: false - want: true", a, b)
+	}
+	a = NewIntSet(1, 2)
+	b = NewIntSet(1, 2, 3)
+	if !a.IsSubsetOf(b) {
+		t.Errorf("%v.IsSubsetOf(%v) got: false - want: true", a, b)
+	}
+	if b.IsSubsetOf(a) {
+		t.Errorf("%v.IsSubsetOf(%v) got: true - want: false", b, a)
+	}
+}
+
 func TestIntSetDisjoint(t *testing.T) {
 	a := NewIntSet()
 	b := NewIntSet()

@@ -116,6 +116,15 @@ func (s IntSet) Difference(t IntSet) IntSet {
 	return r
 }
 
+func (s IntSet) IsSubsetOf(t IntSet) bool {
+	for e := range s {
+		if !t.Has(e) {
+			return false
+		}
+	}
+	return true
+}
+
 func (s IntSet) Disjoint(t IntSet) bool {
 	return s.Intersection(t).IsEmpty()
 }
