@@ -148,6 +148,21 @@ func TestIntSetIntersection(t *testing.T) {
 	}
 }
 
+func TestIntSetDifference(t *testing.T) {
+	a := NewIntSet()
+	b := NewIntSet()
+	w := NewIntSet()
+	if g := a.Difference(b); !g.Equals(w) {
+		t.Errorf("%v.Difference(%v) got: %v - want: %v", a, b, g, w)
+	}
+	a = NewIntSet(1, 2)
+	b = NewIntSet(2, 3)
+	w = NewIntSet(1)
+	if g := a.Difference(b); !g.Equals(w) {
+		t.Errorf("%v.Difference(%v) got: %v - want: %v", a, b, g, w)
+	}
+}
+
 func TestIntSetDisjoint(t *testing.T) {
 	a := NewIntSet()
 	b := NewIntSet()

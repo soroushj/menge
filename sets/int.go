@@ -106,6 +106,16 @@ func (s IntSet) Intersection(t IntSet) IntSet {
 	return r
 }
 
+func (s IntSet) Difference(t IntSet) IntSet {
+	r := make(IntSet, len(s))
+	for e := range s {
+		if !t.Has(e) {
+			r[e] = struct{}{}
+		}
+	}
+	return r
+}
+
 func (s IntSet) Disjoint(t IntSet) bool {
 	return s.Intersection(t).IsEmpty()
 }
