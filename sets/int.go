@@ -90,6 +90,22 @@ func (s IntSet) Union(t IntSet) IntSet {
 	return r
 }
 
+func (s IntSet) Intersection(t IntSet) IntSet {
+	var small, large IntSet
+	if len(s) <= len(t) {
+		small, large = s, t
+	} else {
+		small, large = t, s
+	}
+	r := make(IntSet, len(small))
+	for e := range small {
+		if _, ok := large[e]; ok {
+			r[e] = struct{}{}
+		}
+	}
+	return r
+}
+
 func NewIntSet(elems ...int) IntSet {
 	s := make(IntSet, len(elems))
 	for _, e := range elems {

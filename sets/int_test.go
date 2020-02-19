@@ -127,3 +127,21 @@ func TestIntSetUnion(t *testing.T) {
 		t.Errorf("%v.Union(%v) got: %v - want: %v", a, b, g, w)
 	}
 }
+
+func TestIntSetIntersection(t *testing.T) {
+	a := NewIntSet()
+	b := NewIntSet()
+	w := NewIntSet()
+	if g := a.Intersection(b); !g.Equals(w) {
+		t.Errorf("%v.Intersection(%v) got: %v - want: %v", a, b, g, w)
+	}
+	a = NewIntSet(1, 2, 3)
+	b = NewIntSet(3, 4)
+	w = NewIntSet(3)
+	if g := a.Intersection(b); !g.Equals(w) {
+		t.Errorf("%v.Intersection(%v) got: %v - want: %v", a, b, g, w)
+	}
+	if g := b.Intersection(a); !g.Equals(w) {
+		t.Errorf("%v.Intersection(%v) got: %v - want: %v", b, a, g, w)
+	}
+}
