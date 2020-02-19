@@ -19,6 +19,12 @@ func (s IntSet) Remove(elems ...int) {
 	}
 }
 
+func (s IntSet) Clear() {
+	for e := range s {
+		delete(s, e)
+	}
+}
+
 func (s IntSet) Has(elem int) bool {
 	_, ok := s[elem]
 	return ok
@@ -32,12 +38,6 @@ func (s IntSet) IsEmpty() bool {
 	return len(s) == 0
 }
 
-func (s IntSet) Clear() {
-	for e := range s {
-		delete(s, e)
-	}
-}
-
 func (s IntSet) AsSlice() []int {
 	a := make([]int, len(s))
 	i := 0
@@ -49,16 +49,14 @@ func (s IntSet) AsSlice() []int {
 }
 
 func (s IntSet) String() string {
-	if len(s) == 0 {
-		return "{}"
-	}
 	b := &strings.Builder{}
 	b.Grow(len(s) * 4)
+	fmt.Fprint(b, "{")
 	first := true
 	for e := range s {
 		if first {
 			first = false
-			fmt.Fprintf(b, "{%v", e)
+			fmt.Fprintf(b, "%v", e)
 		} else {
 			fmt.Fprintf(b, " %v", e)
 		}
