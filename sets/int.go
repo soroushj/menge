@@ -125,8 +125,19 @@ func (s IntSet) IsSubsetOf(t IntSet) bool {
 	return true
 }
 
-func (s IntSet) Disjoint(t IntSet) bool {
-	return s.Intersection(t).IsEmpty()
+func (s IntSet) IsDisjointFrom(t IntSet) bool {
+	var small, large IntSet
+	if len(s) <= len(t) {
+		small, large = s, t
+	} else {
+		small, large = t, s
+	}
+	for e := range small {
+		if large.Has(e) {
+			return false
+		}
+	}
+	return true
 }
 
 func NewIntSet(elems ...int) IntSet {

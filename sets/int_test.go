@@ -179,20 +179,26 @@ func TestIntSetIsSubsetOf(t *testing.T) {
 	}
 }
 
-func TestIntSetDisjoint(t *testing.T) {
+func TestIntSetIsDisjointFrom(t *testing.T) {
 	a := NewIntSet()
 	b := NewIntSet()
-	if !a.Disjoint(b) {
-		t.Errorf("%v.Disjoint(%v) got: false - want: true", a, b)
+	if !a.IsDisjointFrom(b) {
+		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", a, b)
 	}
 	a = NewIntSet(1, 2)
-	b = NewIntSet(3, 4)
-	if !a.Disjoint(b) {
-		t.Errorf("%v.Disjoint(%v) got: false - want: true", a, b)
+	b = NewIntSet(3, 4, 5)
+	if !a.IsDisjointFrom(b) {
+		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", a, b)
+	}
+	if !b.IsDisjointFrom(a) {
+		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", b, a)
 	}
 	a = NewIntSet(1, 2)
-	b = NewIntSet(2, 3)
-	if a.Disjoint(b) {
-		t.Errorf("%v.Disjoint(%v) got: true - want: false", a, b)
+	b = NewIntSet(2, 3, 4)
+	if a.IsDisjointFrom(b) {
+		t.Errorf("%v.IsDisjointFrom(%v) got: true - want: false", a, b)
+	}
+	if b.IsDisjointFrom(a) {
+		t.Errorf("%v.IsDisjointFrom(%v) got: true - want: false", b, a)
 	}
 }
