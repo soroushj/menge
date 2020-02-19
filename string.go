@@ -5,47 +5,47 @@ import (
 	"strings"
 )
 
-// StringSet represents a set of string elements
+// StringSet represents a set of string elements.
 type StringSet map[string]struct{}
 
-// Add adds zero or more elements to the set
+// Add adds zero or more elements to the set.
 func (s StringSet) Add(elems ...string) {
 	for _, e := range elems {
 		s[e] = struct{}{}
 	}
 }
 
-// Remove removes zero or more elements from the set
+// Remove removes zero or more elements from the set.
 func (s StringSet) Remove(elems ...string) {
 	for _, e := range elems {
 		delete(s, e)
 	}
 }
 
-// Empty empties the set
+// Empty empties the set.
 func (s StringSet) Empty() {
 	for e := range s {
 		delete(s, e)
 	}
 }
 
-// Has indicates whether the set has an element
+// Has indicates whether the set has an element.
 func (s StringSet) Has(elem string) bool {
 	_, ok := s[elem]
 	return ok
 }
 
-// Size returns the size of the set
+// Size returns the size of the set.
 func (s StringSet) Size() int {
 	return len(s)
 }
 
-// IsEmpty indicates whether the set is empty
+// IsEmpty indicates whether the set is empty.
 func (s StringSet) IsEmpty() bool {
 	return len(s) == 0
 }
 
-// AsSlice returns an equivalent slice with no specific order of the elements
+// AsSlice returns an equivalent slice with no specific order of the elements.
 func (s StringSet) AsSlice() []string {
 	a := make([]string, len(s))
 	i := 0
@@ -56,7 +56,7 @@ func (s StringSet) AsSlice() []string {
 	return a
 }
 
-// String returns a string representation of the set
+// String returns a string representation of the set.
 func (s StringSet) String() string {
 	b := &strings.Builder{}
 	b.Grow(len(s) * 4)
@@ -74,7 +74,7 @@ func (s StringSet) String() string {
 	return b.String()
 }
 
-// Equals indicates whether s and t are equal
+// Equals indicates whether s and t are equal.
 func (s StringSet) Equals(t StringSet) bool {
 	if len(s) != len(t) {
 		return false
@@ -89,7 +89,7 @@ func (s StringSet) Equals(t StringSet) bool {
 	return len(r) == 0
 }
 
-// Union returns the union of s and t
+// Union returns the union of s and t.
 func (s StringSet) Union(t StringSet) StringSet {
 	r := make(StringSet, len(s)+len(t))
 	for e := range s {
@@ -101,7 +101,7 @@ func (s StringSet) Union(t StringSet) StringSet {
 	return r
 }
 
-// Intersection returns the intersection of s and t
+// Intersection returns the intersection of s and t.
 func (s StringSet) Intersection(t StringSet) StringSet {
 	var small, large StringSet
 	if len(s) <= len(t) {
@@ -118,7 +118,7 @@ func (s StringSet) Intersection(t StringSet) StringSet {
 	return r
 }
 
-// Difference returns the difference of s and t, i.e., s - t
+// Difference returns the difference of s and t, i.e., s - t.
 func (s StringSet) Difference(t StringSet) StringSet {
 	r := make(StringSet, len(s))
 	for e := range s {
@@ -129,7 +129,7 @@ func (s StringSet) Difference(t StringSet) StringSet {
 	return r
 }
 
-// IsSubsetOf indicates whether s is a subset of t
+// IsSubsetOf indicates whether s is a subset of t.
 func (s StringSet) IsSubsetOf(t StringSet) bool {
 	for e := range s {
 		if !t.Has(e) {
@@ -139,7 +139,7 @@ func (s StringSet) IsSubsetOf(t StringSet) bool {
 	return true
 }
 
-// IsDisjointFrom indicates whether s and t are disjoint
+// IsDisjointFrom indicates whether s and t are disjoint.
 func (s StringSet) IsDisjointFrom(t StringSet) bool {
 	var small, large StringSet
 	if len(s) <= len(t) {
@@ -155,7 +155,7 @@ func (s StringSet) IsDisjointFrom(t StringSet) bool {
 	return true
 }
 
-// NewStringSet returns a new StringSet containing zero or more elements
+// NewStringSet returns a new StringSet containing zero or more elements.
 func NewStringSet(elems ...string) StringSet {
 	s := make(StringSet, len(elems))
 	s.Add(elems...)

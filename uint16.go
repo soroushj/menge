@@ -5,47 +5,47 @@ import (
 	"strings"
 )
 
-// UInt16Set represents a set of uint16 elements
+// UInt16Set represents a set of uint16 elements.
 type UInt16Set map[uint16]struct{}
 
-// Add adds zero or more elements to the set
+// Add adds zero or more elements to the set.
 func (s UInt16Set) Add(elems ...uint16) {
 	for _, e := range elems {
 		s[e] = struct{}{}
 	}
 }
 
-// Remove removes zero or more elements from the set
+// Remove removes zero or more elements from the set.
 func (s UInt16Set) Remove(elems ...uint16) {
 	for _, e := range elems {
 		delete(s, e)
 	}
 }
 
-// Empty empties the set
+// Empty empties the set.
 func (s UInt16Set) Empty() {
 	for e := range s {
 		delete(s, e)
 	}
 }
 
-// Has indicates whether the set has an element
+// Has indicates whether the set has an element.
 func (s UInt16Set) Has(elem uint16) bool {
 	_, ok := s[elem]
 	return ok
 }
 
-// Size returns the size of the set
+// Size returns the size of the set.
 func (s UInt16Set) Size() int {
 	return len(s)
 }
 
-// IsEmpty indicates whether the set is empty
+// IsEmpty indicates whether the set is empty.
 func (s UInt16Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
-// AsSlice returns an equivalent slice with no specific order of the elements
+// AsSlice returns an equivalent slice with no specific order of the elements.
 func (s UInt16Set) AsSlice() []uint16 {
 	a := make([]uint16, len(s))
 	i := 0
@@ -56,7 +56,7 @@ func (s UInt16Set) AsSlice() []uint16 {
 	return a
 }
 
-// String returns a string representation of the set
+// String returns a string representation of the set.
 func (s UInt16Set) String() string {
 	b := &strings.Builder{}
 	b.Grow(len(s) * 4)
@@ -74,7 +74,7 @@ func (s UInt16Set) String() string {
 	return b.String()
 }
 
-// Equals indicates whether s and t are equal
+// Equals indicates whether s and t are equal.
 func (s UInt16Set) Equals(t UInt16Set) bool {
 	if len(s) != len(t) {
 		return false
@@ -89,7 +89,7 @@ func (s UInt16Set) Equals(t UInt16Set) bool {
 	return len(r) == 0
 }
 
-// Union returns the union of s and t
+// Union returns the union of s and t.
 func (s UInt16Set) Union(t UInt16Set) UInt16Set {
 	r := make(UInt16Set, len(s)+len(t))
 	for e := range s {
@@ -101,7 +101,7 @@ func (s UInt16Set) Union(t UInt16Set) UInt16Set {
 	return r
 }
 
-// Intersection returns the intersection of s and t
+// Intersection returns the intersection of s and t.
 func (s UInt16Set) Intersection(t UInt16Set) UInt16Set {
 	var small, large UInt16Set
 	if len(s) <= len(t) {
@@ -118,7 +118,7 @@ func (s UInt16Set) Intersection(t UInt16Set) UInt16Set {
 	return r
 }
 
-// Difference returns the difference of s and t, i.e., s - t
+// Difference returns the difference of s and t, i.e., s - t.
 func (s UInt16Set) Difference(t UInt16Set) UInt16Set {
 	r := make(UInt16Set, len(s))
 	for e := range s {
@@ -129,7 +129,7 @@ func (s UInt16Set) Difference(t UInt16Set) UInt16Set {
 	return r
 }
 
-// IsSubsetOf indicates whether s is a subset of t
+// IsSubsetOf indicates whether s is a subset of t.
 func (s UInt16Set) IsSubsetOf(t UInt16Set) bool {
 	for e := range s {
 		if !t.Has(e) {
@@ -139,7 +139,7 @@ func (s UInt16Set) IsSubsetOf(t UInt16Set) bool {
 	return true
 }
 
-// IsDisjointFrom indicates whether s and t are disjoint
+// IsDisjointFrom indicates whether s and t are disjoint.
 func (s UInt16Set) IsDisjointFrom(t UInt16Set) bool {
 	var small, large UInt16Set
 	if len(s) <= len(t) {
@@ -155,7 +155,7 @@ func (s UInt16Set) IsDisjointFrom(t UInt16Set) bool {
 	return true
 }
 
-// NewUInt16Set returns a new UInt16Set containing zero or more elements
+// NewUInt16Set returns a new UInt16Set containing zero or more elements.
 func NewUInt16Set(elems ...uint16) UInt16Set {
 	s := make(UInt16Set, len(elems))
 	s.Add(elems...)

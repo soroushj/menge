@@ -5,47 +5,47 @@ import (
 	"strings"
 )
 
-// UIntSet represents a set of uint elements
+// UIntSet represents a set of uint elements.
 type UIntSet map[uint]struct{}
 
-// Add adds zero or more elements to the set
+// Add adds zero or more elements to the set.
 func (s UIntSet) Add(elems ...uint) {
 	for _, e := range elems {
 		s[e] = struct{}{}
 	}
 }
 
-// Remove removes zero or more elements from the set
+// Remove removes zero or more elements from the set.
 func (s UIntSet) Remove(elems ...uint) {
 	for _, e := range elems {
 		delete(s, e)
 	}
 }
 
-// Empty empties the set
+// Empty empties the set.
 func (s UIntSet) Empty() {
 	for e := range s {
 		delete(s, e)
 	}
 }
 
-// Has indicates whether the set has an element
+// Has indicates whether the set has an element.
 func (s UIntSet) Has(elem uint) bool {
 	_, ok := s[elem]
 	return ok
 }
 
-// Size returns the size of the set
+// Size returns the size of the set.
 func (s UIntSet) Size() int {
 	return len(s)
 }
 
-// IsEmpty indicates whether the set is empty
+// IsEmpty indicates whether the set is empty.
 func (s UIntSet) IsEmpty() bool {
 	return len(s) == 0
 }
 
-// AsSlice returns an equivalent slice with no specific order of the elements
+// AsSlice returns an equivalent slice with no specific order of the elements.
 func (s UIntSet) AsSlice() []uint {
 	a := make([]uint, len(s))
 	i := 0
@@ -56,7 +56,7 @@ func (s UIntSet) AsSlice() []uint {
 	return a
 }
 
-// String returns a string representation of the set
+// String returns a string representation of the set.
 func (s UIntSet) String() string {
 	b := &strings.Builder{}
 	b.Grow(len(s) * 4)
@@ -74,7 +74,7 @@ func (s UIntSet) String() string {
 	return b.String()
 }
 
-// Equals indicates whether s and t are equal
+// Equals indicates whether s and t are equal.
 func (s UIntSet) Equals(t UIntSet) bool {
 	if len(s) != len(t) {
 		return false
@@ -89,7 +89,7 @@ func (s UIntSet) Equals(t UIntSet) bool {
 	return len(r) == 0
 }
 
-// Union returns the union of s and t
+// Union returns the union of s and t.
 func (s UIntSet) Union(t UIntSet) UIntSet {
 	r := make(UIntSet, len(s)+len(t))
 	for e := range s {
@@ -101,7 +101,7 @@ func (s UIntSet) Union(t UIntSet) UIntSet {
 	return r
 }
 
-// Intersection returns the intersection of s and t
+// Intersection returns the intersection of s and t.
 func (s UIntSet) Intersection(t UIntSet) UIntSet {
 	var small, large UIntSet
 	if len(s) <= len(t) {
@@ -118,7 +118,7 @@ func (s UIntSet) Intersection(t UIntSet) UIntSet {
 	return r
 }
 
-// Difference returns the difference of s and t, i.e., s - t
+// Difference returns the difference of s and t, i.e., s - t.
 func (s UIntSet) Difference(t UIntSet) UIntSet {
 	r := make(UIntSet, len(s))
 	for e := range s {
@@ -129,7 +129,7 @@ func (s UIntSet) Difference(t UIntSet) UIntSet {
 	return r
 }
 
-// IsSubsetOf indicates whether s is a subset of t
+// IsSubsetOf indicates whether s is a subset of t.
 func (s UIntSet) IsSubsetOf(t UIntSet) bool {
 	for e := range s {
 		if !t.Has(e) {
@@ -139,7 +139,7 @@ func (s UIntSet) IsSubsetOf(t UIntSet) bool {
 	return true
 }
 
-// IsDisjointFrom indicates whether s and t are disjoint
+// IsDisjointFrom indicates whether s and t are disjoint.
 func (s UIntSet) IsDisjointFrom(t UIntSet) bool {
 	var small, large UIntSet
 	if len(s) <= len(t) {
@@ -155,7 +155,7 @@ func (s UIntSet) IsDisjointFrom(t UIntSet) bool {
 	return true
 }
 
-// NewUIntSet returns a new UIntSet containing zero or more elements
+// NewUIntSet returns a new UIntSet containing zero or more elements.
 func NewUIntSet(elems ...uint) UIntSet {
 	s := make(UIntSet, len(elems))
 	s.Add(elems...)

@@ -5,47 +5,47 @@ import (
 	"strings"
 )
 
-// Complex64Set represents a set of complex64 elements
+// Complex64Set represents a set of complex64 elements.
 type Complex64Set map[complex64]struct{}
 
-// Add adds zero or more elements to the set
+// Add adds zero or more elements to the set.
 func (s Complex64Set) Add(elems ...complex64) {
 	for _, e := range elems {
 		s[e] = struct{}{}
 	}
 }
 
-// Remove removes zero or more elements from the set
+// Remove removes zero or more elements from the set.
 func (s Complex64Set) Remove(elems ...complex64) {
 	for _, e := range elems {
 		delete(s, e)
 	}
 }
 
-// Empty empties the set
+// Empty empties the set.
 func (s Complex64Set) Empty() {
 	for e := range s {
 		delete(s, e)
 	}
 }
 
-// Has indicates whether the set has an element
+// Has indicates whether the set has an element.
 func (s Complex64Set) Has(elem complex64) bool {
 	_, ok := s[elem]
 	return ok
 }
 
-// Size returns the size of the set
+// Size returns the size of the set.
 func (s Complex64Set) Size() int {
 	return len(s)
 }
 
-// IsEmpty indicates whether the set is empty
+// IsEmpty indicates whether the set is empty.
 func (s Complex64Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
-// AsSlice returns an equivalent slice with no specific order of the elements
+// AsSlice returns an equivalent slice with no specific order of the elements.
 func (s Complex64Set) AsSlice() []complex64 {
 	a := make([]complex64, len(s))
 	i := 0
@@ -56,7 +56,7 @@ func (s Complex64Set) AsSlice() []complex64 {
 	return a
 }
 
-// String returns a string representation of the set
+// String returns a string representation of the set.
 func (s Complex64Set) String() string {
 	b := &strings.Builder{}
 	b.Grow(len(s) * 4)
@@ -74,7 +74,7 @@ func (s Complex64Set) String() string {
 	return b.String()
 }
 
-// Equals indicates whether s and t are equal
+// Equals indicates whether s and t are equal.
 func (s Complex64Set) Equals(t Complex64Set) bool {
 	if len(s) != len(t) {
 		return false
@@ -89,7 +89,7 @@ func (s Complex64Set) Equals(t Complex64Set) bool {
 	return len(r) == 0
 }
 
-// Union returns the union of s and t
+// Union returns the union of s and t.
 func (s Complex64Set) Union(t Complex64Set) Complex64Set {
 	r := make(Complex64Set, len(s)+len(t))
 	for e := range s {
@@ -101,7 +101,7 @@ func (s Complex64Set) Union(t Complex64Set) Complex64Set {
 	return r
 }
 
-// Intersection returns the intersection of s and t
+// Intersection returns the intersection of s and t.
 func (s Complex64Set) Intersection(t Complex64Set) Complex64Set {
 	var small, large Complex64Set
 	if len(s) <= len(t) {
@@ -118,7 +118,7 @@ func (s Complex64Set) Intersection(t Complex64Set) Complex64Set {
 	return r
 }
 
-// Difference returns the difference of s and t, i.e., s - t
+// Difference returns the difference of s and t, i.e., s - t.
 func (s Complex64Set) Difference(t Complex64Set) Complex64Set {
 	r := make(Complex64Set, len(s))
 	for e := range s {
@@ -129,7 +129,7 @@ func (s Complex64Set) Difference(t Complex64Set) Complex64Set {
 	return r
 }
 
-// IsSubsetOf indicates whether s is a subset of t
+// IsSubsetOf indicates whether s is a subset of t.
 func (s Complex64Set) IsSubsetOf(t Complex64Set) bool {
 	for e := range s {
 		if !t.Has(e) {
@@ -139,7 +139,7 @@ func (s Complex64Set) IsSubsetOf(t Complex64Set) bool {
 	return true
 }
 
-// IsDisjointFrom indicates whether s and t are disjoint
+// IsDisjointFrom indicates whether s and t are disjoint.
 func (s Complex64Set) IsDisjointFrom(t Complex64Set) bool {
 	var small, large Complex64Set
 	if len(s) <= len(t) {
@@ -155,7 +155,7 @@ func (s Complex64Set) IsDisjointFrom(t Complex64Set) bool {
 	return true
 }
 
-// NewComplex64Set returns a new Complex64Set containing zero or more elements
+// NewComplex64Set returns a new Complex64Set containing zero or more elements.
 func NewComplex64Set(elems ...complex64) Complex64Set {
 	s := make(Complex64Set, len(elems))
 	s.Add(elems...)
