@@ -99,7 +99,7 @@ func (s IntSet) Intersection(t IntSet) IntSet {
 	}
 	r := make(IntSet, len(small))
 	for e := range small {
-		if _, ok := large[e]; ok {
+		if large.Has(e) {
 			r[e] = struct{}{}
 		}
 	}
