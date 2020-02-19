@@ -106,6 +106,10 @@ func (s IntSet) Intersection(t IntSet) IntSet {
 	return r
 }
 
+func (s IntSet) Disjoint(t IntSet) bool {
+	return s.Intersection(t).IsEmpty()
+}
+
 func NewIntSet(elems ...int) IntSet {
 	s := make(IntSet, len(elems))
 	for _, e := range elems {

@@ -145,3 +145,21 @@ func TestIntSetIntersection(t *testing.T) {
 		t.Errorf("%v.Intersection(%v) got: %v - want: %v", b, a, g, w)
 	}
 }
+
+func TestIntSetDisjoint(t *testing.T) {
+	a := NewIntSet()
+	b := NewIntSet()
+	if !a.Disjoint(b) {
+		t.Errorf("%v.Disjoint(%v) got: false - want: true", a, b)
+	}
+	a = NewIntSet(1, 2)
+	b = NewIntSet(3, 4)
+	if !a.Disjoint(b) {
+		t.Errorf("%v.Disjoint(%v) got: false - want: true", a, b)
+	}
+	a = NewIntSet(1, 2)
+	b = NewIntSet(2, 3)
+	if a.Disjoint(b) {
+		t.Errorf("%v.Disjoint(%v) got: true - want: false", a, b)
+	}
+}
