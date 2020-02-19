@@ -112,8 +112,6 @@ func (s IntSet) Disjoint(t IntSet) bool {
 
 func NewIntSet(elems ...int) IntSet {
 	s := make(IntSet, len(elems))
-	for _, e := range elems {
-		s[e] = struct{}{}
-	}
+	s.Add(elems...)
 	return s
 }

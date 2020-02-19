@@ -96,20 +96,22 @@ func TestIntSetEquals(t *testing.T) {
 	a := NewIntSet()
 	b := NewIntSet()
 	if !a.Equals(b) {
-		t.Error("{}.Equals({}) got: false - want: true")
+		t.Errorf("%v.Equals(%v) got: false - want: true", a, b)
 	}
-	a.Add(1)
-	b.Add(2)
-	if a.Equals(b) {
-		t.Error("{1}.Equals({2}) got: true - want: false")
-	}
-	a.Add(2)
-	if a.Equals(b) {
-		t.Error("{1 2}.Equals({2}) got: true - want: false")
-	}
-	b.Add(1)
+	a = NewIntSet(1, 2)
+	b = NewIntSet(1, 2)
 	if !a.Equals(b) {
-		t.Error("{1 2}.Equals({1 2}) got: false - want: true")
+		t.Errorf("%v.Equals(%v) got: false - want: true", a, b)
+	}
+	a = NewIntSet(1, 2)
+	b = NewIntSet(2)
+	if a.Equals(b) {
+		t.Errorf("%v.Equals(%v) got: true - want: false", a, b)
+	}
+	a = NewIntSet(1)
+	b = NewIntSet(2)
+	if a.Equals(b) {
+		t.Errorf("%v.Equals(%v) got: true - want: false", a, b)
 	}
 }
 
