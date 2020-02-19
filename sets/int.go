@@ -79,6 +79,10 @@ func (s IntSet) Equals(t IntSet) bool {
 	return len(r) == 0
 }
 
-func NewIntSet() IntSet {
-	return make(IntSet)
+func NewIntSet(elems ...int) IntSet {
+	s := make(IntSet, len(elems))
+	for _, e := range elems {
+		s[e] = struct{}{}
+	}
+	return s
 }
