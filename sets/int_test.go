@@ -80,15 +80,15 @@ func TestIntSetBasics(t *testing.T) {
 	if r := s.String(); r != "{1 2}" && r != "{2 1}" {
 		t.Errorf("NewIntSet(2, 1, 2) String() got: %v - want: {1 2} or {2 1} - expected set: {1 2}", r)
 	}
-	// NewIntSet(2, 1, 2) Clear() -> {}
-	s.Clear()
+	// NewIntSet(2, 1, 2) Empty() -> {}
+	s.Empty()
 	if !s.IsEmpty() {
-		t.Error("NewIntSet(2, 1, 2) Clear() IsEmpty() got: false - want: true - expected set: {}")
+		t.Error("NewIntSet(2, 1, 2) Empty() IsEmpty() got: false - want: true - expected set: {}")
 	}
-	// NewIntSet(2, 1, 2) Clear() Clear() -> {}
-	s.Clear()
+	// NewIntSet(2, 1, 2) Empty() Empty() -> {}
+	s.Empty()
 	if !s.IsEmpty() {
-		t.Error("NewIntSet(2, 1, 2) Clear() Clear() IsEmpty() got: false - want: true - expected set: {}")
+		t.Error("NewIntSet(2, 1, 2) Empty() Empty() IsEmpty() got: false - want: true - expected set: {}")
 	}
 }
 

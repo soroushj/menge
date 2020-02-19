@@ -22,8 +22,8 @@ func (s IntSet) Remove(elems ...int) {
 	}
 }
 
-// Clear empties the set
-func (s IntSet) Clear() {
+// Empty empties the set
+func (s IntSet) Empty() {
 	for e := range s {
 		delete(s, e)
 	}
