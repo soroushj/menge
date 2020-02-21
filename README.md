@@ -27,3 +27,42 @@ Menge sets use Go maps as their underlying data structure.
 As a result, these sets are [not safe for concurrent use](https://golang.org/doc/faq#atomic_maps).
 You can protect them with [sync.RWMutex](https://golang.org/pkg/sync/#RWMutex).
 Read the *Concurrency* section of [this article](https://blog.golang.org/go-maps-in-action) for more details.
+
+## Examples
+
+### The Basics
+
+You can run this example [on the Go Playground](https://play.golang.org/p/SGXwGO6Ysv0).
+
+```go
+s := menge.NewIntSet(1, 2, 3)
+fmt.Println("Set:", s)
+fmt.Println("Has 2?", s.Has(2))
+s.Add(2)
+s.Add(2, 3, 4)
+s.Remove(1)
+s.Remove(1, 2)
+for e := range s {
+	fmt.Println("Element:", e)
+}
+fmt.Println("Size:", s.Size())
+var a []int = s.AsSlice()
+fmt.Println("Slice:", a)
+s.Empty()
+fmt.Println("Is empty?", s.IsEmpty())
+```
+
+### Set Operations
+
+You can run this example [on the Go Playground](https://play.golang.org/p/zdOKLFfrcAH).
+
+```go
+a := menge.NewIntSet(1, 2)
+b := menge.NewIntSet(2, 3)
+fmt.Printf("Does %v equal %v? %v\n", a, b, a.Equals(b))
+fmt.Printf("Is %v a subset of %v? %v\n", a, b, a.IsSubsetOf(b))
+fmt.Printf("Are %v and %v disjoint? %v\n", a, b, a.IsDisjointFrom(b))
+fmt.Printf("%v ⋃ %v = %v\n", a, b, a.Union(b))
+fmt.Printf("%v ⋂ %v = %v\n", a, b, a.Intersection(b))
+fmt.Printf("%v - %v = %v\n", a, b, a.Difference(b))
+```
