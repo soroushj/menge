@@ -59,7 +59,7 @@ func (s Float64Set) AsSlice() []float64 {
 // String returns a string representation of the set.
 func (s Float64Set) String() string {
 	b := &strings.Builder{}
-	b.Grow(len(s) * 4)
+	b.Grow(len(s) * 8)
 	fmt.Fprint(b, "{")
 	first := true
 	for e := range s {

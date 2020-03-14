@@ -59,7 +59,7 @@ func (s UIntSet) AsSlice() []uint {
 // String returns a string representation of the set.
 func (s UIntSet) String() string {
 	b := &strings.Builder{}
-	b.Grow(len(s) * 4)
+	b.Grow(len(s) * 8)
 	fmt.Fprint(b, "{")
 	first := true
 	for e := range s {
