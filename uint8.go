@@ -111,7 +111,7 @@ func (s UInt8Set) Intersection(t UInt8Set) UInt8Set {
 	}
 	r := make(UInt8Set, len(small))
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -122,7 +122,7 @@ func (s UInt8Set) Intersection(t UInt8Set) UInt8Set {
 func (s UInt8Set) Difference(t UInt8Set) UInt8Set {
 	r := make(UInt8Set, len(s))
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -132,7 +132,7 @@ func (s UInt8Set) Difference(t UInt8Set) UInt8Set {
 // IsSubsetOf indicates whether s is a subset of t.
 func (s UInt8Set) IsSubsetOf(t UInt8Set) bool {
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			return false
 		}
 	}
@@ -148,7 +148,7 @@ func (s UInt8Set) IsDisjointFrom(t UInt8Set) bool {
 		small, large = t, s
 	}
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			return false
 		}
 	}

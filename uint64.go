@@ -111,7 +111,7 @@ func (s UInt64Set) Intersection(t UInt64Set) UInt64Set {
 	}
 	r := make(UInt64Set, len(small))
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -122,7 +122,7 @@ func (s UInt64Set) Intersection(t UInt64Set) UInt64Set {
 func (s UInt64Set) Difference(t UInt64Set) UInt64Set {
 	r := make(UInt64Set, len(s))
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -132,7 +132,7 @@ func (s UInt64Set) Difference(t UInt64Set) UInt64Set {
 // IsSubsetOf indicates whether s is a subset of t.
 func (s UInt64Set) IsSubsetOf(t UInt64Set) bool {
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			return false
 		}
 	}
@@ -148,7 +148,7 @@ func (s UInt64Set) IsDisjointFrom(t UInt64Set) bool {
 		small, large = t, s
 	}
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			return false
 		}
 	}

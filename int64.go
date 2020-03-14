@@ -111,7 +111,7 @@ func (s Int64Set) Intersection(t Int64Set) Int64Set {
 	}
 	r := make(Int64Set, len(small))
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -122,7 +122,7 @@ func (s Int64Set) Intersection(t Int64Set) Int64Set {
 func (s Int64Set) Difference(t Int64Set) Int64Set {
 	r := make(Int64Set, len(s))
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -132,7 +132,7 @@ func (s Int64Set) Difference(t Int64Set) Int64Set {
 // IsSubsetOf indicates whether s is a subset of t.
 func (s Int64Set) IsSubsetOf(t Int64Set) bool {
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			return false
 		}
 	}
@@ -148,7 +148,7 @@ func (s Int64Set) IsDisjointFrom(t Int64Set) bool {
 		small, large = t, s
 	}
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			return false
 		}
 	}

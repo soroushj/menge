@@ -111,7 +111,7 @@ func (s UIntPtrSet) Intersection(t UIntPtrSet) UIntPtrSet {
 	}
 	r := make(UIntPtrSet, len(small))
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -122,7 +122,7 @@ func (s UIntPtrSet) Intersection(t UIntPtrSet) UIntPtrSet {
 func (s UIntPtrSet) Difference(t UIntPtrSet) UIntPtrSet {
 	r := make(UIntPtrSet, len(s))
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -132,7 +132,7 @@ func (s UIntPtrSet) Difference(t UIntPtrSet) UIntPtrSet {
 // IsSubsetOf indicates whether s is a subset of t.
 func (s UIntPtrSet) IsSubsetOf(t UIntPtrSet) bool {
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			return false
 		}
 	}
@@ -148,7 +148,7 @@ func (s UIntPtrSet) IsDisjointFrom(t UIntPtrSet) bool {
 		small, large = t, s
 	}
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			return false
 		}
 	}

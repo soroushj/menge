@@ -111,7 +111,7 @@ func (s UInt16Set) Intersection(t UInt16Set) UInt16Set {
 	}
 	r := make(UInt16Set, len(small))
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -122,7 +122,7 @@ func (s UInt16Set) Intersection(t UInt16Set) UInt16Set {
 func (s UInt16Set) Difference(t UInt16Set) UInt16Set {
 	r := make(UInt16Set, len(s))
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			r[e] = struct{}{}
 		}
 	}
@@ -132,7 +132,7 @@ func (s UInt16Set) Difference(t UInt16Set) UInt16Set {
 // IsSubsetOf indicates whether s is a subset of t.
 func (s UInt16Set) IsSubsetOf(t UInt16Set) bool {
 	for e := range s {
-		if !t.Has(e) {
+		if _, ok := t[e]; !ok {
 			return false
 		}
 	}
@@ -148,7 +148,7 @@ func (s UInt16Set) IsDisjointFrom(t UInt16Set) bool {
 		small, large = t, s
 	}
 	for e := range small {
-		if large.Has(e) {
+		if _, ok := large[e]; ok {
 			return false
 		}
 	}
