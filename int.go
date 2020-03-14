@@ -79,14 +79,12 @@ func (s IntSet) Equals(t IntSet) bool {
 	if len(s) != len(t) {
 		return false
 	}
-	r := make(IntSet, len(s))
 	for e := range s {
-		r[e] = struct{}{}
+		if _, ok := t[e]; !ok {
+			return false
+		}
 	}
-	for e := range t {
-		delete(r, e)
-	}
-	return len(r) == 0
+	return true
 }
 
 // Union returns the union of s and t.
