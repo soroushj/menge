@@ -137,6 +137,36 @@ func (s Int8Set) IsSubsetOf(t Int8Set) bool {
 	return true
 }
 
+// IsProperSubsetOf indicates whether s is a proper subset of t.
+func (s Int8Set) IsProperSubsetOf(t Int8Set) bool {
+	for e := range s {
+		if _, ok := t[e]; !ok {
+			return false
+		}
+	}
+	return len(s) != len(t)
+}
+
+// IsSupersetOf indicates whether s is a superset of t.
+func (s Int8Set) IsSupersetOf(t Int8Set) bool {
+	for e := range t {
+		if _, ok := s[e]; !ok {
+			return false
+		}
+	}
+	return true
+}
+
+// IsProperSupersetOf indicates whether s is a proper superset of t.
+func (s Int8Set) IsProperSupersetOf(t Int8Set) bool {
+	for e := range t {
+		if _, ok := s[e]; !ok {
+			return false
+		}
+	}
+	return len(s) != len(t)
+}
+
 // IsDisjointFrom indicates whether s and t are disjoint.
 func (s Int8Set) IsDisjointFrom(t Int8Set) bool {
 	var small, large Int8Set

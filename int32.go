@@ -137,6 +137,36 @@ func (s Int32Set) IsSubsetOf(t Int32Set) bool {
 	return true
 }
 
+// IsProperSubsetOf indicates whether s is a proper subset of t.
+func (s Int32Set) IsProperSubsetOf(t Int32Set) bool {
+	for e := range s {
+		if _, ok := t[e]; !ok {
+			return false
+		}
+	}
+	return len(s) != len(t)
+}
+
+// IsSupersetOf indicates whether s is a superset of t.
+func (s Int32Set) IsSupersetOf(t Int32Set) bool {
+	for e := range t {
+		if _, ok := s[e]; !ok {
+			return false
+		}
+	}
+	return true
+}
+
+// IsProperSupersetOf indicates whether s is a proper superset of t.
+func (s Int32Set) IsProperSupersetOf(t Int32Set) bool {
+	for e := range t {
+		if _, ok := s[e]; !ok {
+			return false
+		}
+	}
+	return len(s) != len(t)
+}
+
 // IsDisjointFrom indicates whether s and t are disjoint.
 func (s Int32Set) IsDisjointFrom(t Int32Set) bool {
 	var small, large Int32Set

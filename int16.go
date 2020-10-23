@@ -137,6 +137,36 @@ func (s Int16Set) IsSubsetOf(t Int16Set) bool {
 	return true
 }
 
+// IsProperSubsetOf indicates whether s is a proper subset of t.
+func (s Int16Set) IsProperSubsetOf(t Int16Set) bool {
+	for e := range s {
+		if _, ok := t[e]; !ok {
+			return false
+		}
+	}
+	return len(s) != len(t)
+}
+
+// IsSupersetOf indicates whether s is a superset of t.
+func (s Int16Set) IsSupersetOf(t Int16Set) bool {
+	for e := range t {
+		if _, ok := s[e]; !ok {
+			return false
+		}
+	}
+	return true
+}
+
+// IsProperSupersetOf indicates whether s is a proper superset of t.
+func (s Int16Set) IsProperSupersetOf(t Int16Set) bool {
+	for e := range t {
+		if _, ok := s[e]; !ok {
+			return false
+		}
+	}
+	return len(s) != len(t)
+}
+
 // IsDisjointFrom indicates whether s and t are disjoint.
 func (s Int16Set) IsDisjointFrom(t Int16Set) bool {
 	var small, large Int16Set
