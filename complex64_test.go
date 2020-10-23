@@ -1,204 +1,369 @@
 package menge
 
-import "testing"
+import (
+	"testing"
+)
 
-func TestComplex64SetBasics(t *testing.T) {
-	// NewComplex64Set() -> {}
-	s := NewComplex64Set()
-	if s.Has(1) {
-		t.Error("NewComplex64Set() Has(1) got: true - want: false - expected set: {}")
+func TestNewComplex64Set(t *testing.T) {
+	cases := []struct {
+		arg  []complex64
+		want Complex64Set
+	}{
+		{[]complex64{}, Complex64Set{}},
+		{[]complex64{1, 1}, Complex64Set{1: struct{}{}}},
+		{[]complex64{1, 2}, Complex64Set{1: struct{}{}, 2: struct{}{}}},
 	}
-	if z := s.Size(); z != 0 {
-		t.Errorf("NewComplex64Set() Size() got: %v - want: 0 - expected set: {}", z)
-	}
-	if !s.IsEmpty() {
-		t.Error("NewComplex64Set() IsEmpty() got: false - want: true - expected set: {}")
-	}
-	if a := s.AsSlice(); len(a) != 0 {
-		t.Errorf("NewComplex64Set() AsSlice() got: %v - want: [] - expected set: {}", a)
-	}
-	if r := s.String(); r != "{}" {
-		t.Errorf("NewComplex64Set() String() got: %v - want: {} - expected set: {}", r)
-	}
-	// NewComplex64Set() Add(1, 2, 1) -> {1 2}
-	s.Add(1, 2, 1)
-	if !s.Has(1) {
-		t.Error("NewComplex64Set() Add(1, 2, 1) Has(1) got: false - want: true - expected set: {1 2}")
-	}
-	if !s.Has(2) {
-		t.Error("NewComplex64Set() Add(1, 2, 1) Has(2) got: false - want: true - expected set: {1 2}")
-	}
-	if z := s.Size(); z != 2 {
-		t.Errorf("NewComplex64Set() Add(1, 2, 1) Size() got: %v - want: 2 - expected set: {1 2}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewComplex64Set() Add(1, 2, 1) IsEmpty() got: true - want: false - expected set: {1 2}")
-	}
-	if a := s.AsSlice(); len(a) != 2 || !((a[0] == 1 && a[1] == 2) || (a[0] == 2 && a[1] == 1)) {
-		t.Errorf("NewComplex64Set() Add(1, 2, 1) AsSlice() got: %v - want: [1 2] or [2 1] - expected set: {1 2}", a)
-	}
-	if r := s.String(); r != "{(1+0i) (2+0i)}" && r != "{(2+0i) (1+0i)}" {
-		t.Errorf("NewComplex64Set() Add(1, 2, 1) String() got: %v - want: {(1+0i) (2+0i)} or {(2+0i) (1+0i)} - expected set: {1 2}", r)
-	}
-	// NewComplex64Set() Add(1, 2, 1) Remove(2, 2) -> {1}
-	s.Remove(2, 2)
-	if !s.Has(1) {
-		t.Error("NewComplex64Set() Add(1, 2, 1) Remove(2, 2) Has(1) got: false - want: true - expected set: {1}")
-	}
-	if s.Has(2) {
-		t.Error("NewComplex64Set() Add(1, 2, 1) Remove(2, 2) Has(2) got: true - want: false - expected set: {1}")
-	}
-	if z := s.Size(); z != 1 {
-		t.Errorf("NewComplex64Set() Add(1, 2, 1) Remove(2, 2) Size() got: %v - want: 1 - expected set: {1}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewComplex64Set() Add(1, 2, 1) Remove(2, 2) IsEmpty() got: true - want: false - expected set: {1}")
-	}
-	if a := s.AsSlice(); len(a) != 1 || a[0] != 1 {
-		t.Errorf("NewComplex64Set() Add(1, 2, 1) Remove(2, 2) AsSlice() got: %v - want: [1] - expected set: {1}", a)
-	}
-	if r := s.String(); r != "{(1+0i)}" {
-		t.Errorf("NewComplex64Set() Add(1, 2, 1) Remove(2, 2) String() got: %v - want: {(1+0i)} - expected set: {1}", r)
-	}
-	// NewComplex64Set(2, 1, 2) -> {1 2}
-	s = NewComplex64Set(2, 1, 2)
-	if !s.Has(1) {
-		t.Error("NewComplex64Set(2, 1, 2) Has(1) got: false - want: true - expected set: {1 2}")
-	}
-	if !s.Has(2) {
-		t.Error("NewComplex64Set(2, 1, 2) Has(2) got: false - want: true - expected set: {1 2}")
-	}
-	if z := s.Size(); z != 2 {
-		t.Errorf("NewComplex64Set(2, 1, 2) Size() got: %v - want: 2 - expected set: {1 2}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewComplex64Set(2, 1, 2) IsEmpty() got: true - want: false - expected set: {1 2}")
-	}
-	if a := s.AsSlice(); len(a) != 2 || !((a[0] == 1 && a[1] == 2) || (a[0] == 2 && a[1] == 1)) {
-		t.Errorf("NewComplex64Set(2, 1, 2) AsSlice() got: %v - want: [1 2] or [2 1] - expected set: {1 2}", a)
-	}
-	if r := s.String(); r != "{(1+0i) (2+0i)}" && r != "{(2+0i) (1+0i)}" {
-		t.Errorf("NewComplex64Set(2, 1, 2) String() got: %v - want: {(1+0i) (2+0i)} or {(2+0i) (1+0i)} - expected set: {1 2}", r)
-	}
-	// NewComplex64Set(2, 1, 2) Empty() -> {}
-	s.Empty()
-	if !s.IsEmpty() {
-		t.Error("NewComplex64Set(2, 1, 2) Empty() IsEmpty() got: false - want: true - expected set: {}")
-	}
-	// NewComplex64Set(2, 1, 2) Empty() Empty() -> {}
-	s.Empty()
-	if !s.IsEmpty() {
-		t.Error("NewComplex64Set(2, 1, 2) Empty() Empty() IsEmpty() got: false - want: true - expected set: {}")
+	for _, c := range cases {
+		got := NewComplex64Set(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestComplex64SetEquals(t *testing.T) {
-	a := NewComplex64Set()
-	b := NewComplex64Set()
-	if !a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: false - want: true", a, b)
+func TestComplex64Set_Add(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  []complex64
+		want Complex64Set
+	}{
+		{NewComplex64Set(), []complex64{}, NewComplex64Set()},
+		{NewComplex64Set(), []complex64{1, 1}, NewComplex64Set(1)},
+		{NewComplex64Set(), []complex64{1, 2}, NewComplex64Set(1, 2)},
+		{NewComplex64Set(1), []complex64{}, NewComplex64Set(1)},
+		{NewComplex64Set(1), []complex64{1, 1}, NewComplex64Set(1)},
+		{NewComplex64Set(1), []complex64{2, 3}, NewComplex64Set(1, 2, 3)},
 	}
-	a = NewComplex64Set(1, 2)
-	b = NewComplex64Set(1, 2)
-	if !a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: false - want: true", a, b)
-	}
-	a = NewComplex64Set(1, 2)
-	b = NewComplex64Set(2)
-	if a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: true - want: false", a, b)
-	}
-	a = NewComplex64Set(1)
-	b = NewComplex64Set(2)
-	if a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: true - want: false", a, b)
-	}
-}
-
-func TestComplex64SetUnion(t *testing.T) {
-	a := NewComplex64Set()
-	b := NewComplex64Set()
-	w := NewComplex64Set()
-	if g := a.Union(b); !g.Equals(w) {
-		t.Errorf("%v.Union(%v) got: %v - want: %v", a, b, g, w)
-	}
-	a = NewComplex64Set(1, 2)
-	b = NewComplex64Set(2, 3)
-	w = NewComplex64Set(1, 2, 3)
-	if g := a.Union(b); !g.Equals(w) {
-		t.Errorf("%v.Union(%v) got: %v - want: %v", a, b, g, w)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Add(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestComplex64SetIntersection(t *testing.T) {
-	a := NewComplex64Set()
-	b := NewComplex64Set()
-	w := NewComplex64Set()
-	if g := a.Intersection(b); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", a, b, g, w)
+func TestComplex64Set_Remove(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  []complex64
+		want Complex64Set
+	}{
+		{NewComplex64Set(), []complex64{}, NewComplex64Set()},
+		{NewComplex64Set(1), []complex64{1, 1}, NewComplex64Set()},
+		{NewComplex64Set(1, 2), []complex64{1, 2}, NewComplex64Set()},
+		{NewComplex64Set(1), []complex64{}, NewComplex64Set(1)},
+		{NewComplex64Set(1), []complex64{1, 1}, NewComplex64Set()},
+		{NewComplex64Set(1, 2), []complex64{3}, NewComplex64Set(1, 2)},
+		{NewComplex64Set(1, 2, 3), []complex64{2, 3}, NewComplex64Set(1)},
 	}
-	a = NewComplex64Set(1, 2, 3)
-	b = NewComplex64Set(3, 4)
-	w = NewComplex64Set(3)
-	if g := a.Intersection(b); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", a, b, g, w)
-	}
-	if g := b.Intersection(a); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", b, a, g, w)
-	}
-}
-
-func TestComplex64SetDifference(t *testing.T) {
-	a := NewComplex64Set()
-	b := NewComplex64Set()
-	w := NewComplex64Set()
-	if g := a.Difference(b); !g.Equals(w) {
-		t.Errorf("%v.Difference(%v) got: %v - want: %v", a, b, g, w)
-	}
-	a = NewComplex64Set(1, 2)
-	b = NewComplex64Set(2, 3)
-	w = NewComplex64Set(1)
-	if g := a.Difference(b); !g.Equals(w) {
-		t.Errorf("%v.Difference(%v) got: %v - want: %v", a, b, g, w)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Remove(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestComplex64SetIsSubsetOf(t *testing.T) {
-	a := NewComplex64Set()
-	b := NewComplex64Set()
-	if !a.IsSubsetOf(b) {
-		t.Errorf("%v.IsSubsetOf(%v) got: false - want: true", a, b)
+func TestComplex64Set_Empty(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		want Complex64Set
+	}{
+		{NewComplex64Set(), NewComplex64Set()},
+		{NewComplex64Set(1, 2), NewComplex64Set()},
 	}
-	a = NewComplex64Set(1, 2)
-	b = NewComplex64Set(1, 2, 3)
-	if !a.IsSubsetOf(b) {
-		t.Errorf("%v.IsSubsetOf(%v) got: false - want: true", a, b)
-	}
-	if b.IsSubsetOf(a) {
-		t.Errorf("%v.IsSubsetOf(%v) got: true - want: false", b, a)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Empty()
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestComplex64SetIsDisjointFrom(t *testing.T) {
-	a := NewComplex64Set()
-	b := NewComplex64Set()
-	if !a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", a, b)
+func TestComplex64Set_Has(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  complex64
+		want bool
+	}{
+		{NewComplex64Set(), 1, false},
+		{NewComplex64Set(2), 1, false},
+		{NewComplex64Set(1), 1, true},
+		{NewComplex64Set(1, 2), 1, true},
 	}
-	a = NewComplex64Set(1, 2)
-	b = NewComplex64Set(3, 4, 5)
-	if !a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", a, b)
+	for _, c := range cases {
+		got := c.set.Has(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
-	if !b.IsDisjointFrom(a) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", b, a)
+}
+
+func TestComplex64Set_Size(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		want int
+	}{
+		{NewComplex64Set(), 0},
+		{NewComplex64Set(1, 2), 2},
 	}
-	a = NewComplex64Set(1, 2)
-	b = NewComplex64Set(2, 3, 4)
-	if a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: true - want: false", a, b)
+	for _, c := range cases {
+		got := c.set.Size()
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
-	if b.IsDisjointFrom(a) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: true - want: false", b, a)
+}
+
+func TestComplex64Set_IsEmpty(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		want bool
+	}{
+		{NewComplex64Set(), true},
+		{NewComplex64Set(1, 2), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsEmpty()
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_Clone(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		want Complex64Set
+	}{
+		{NewComplex64Set(), NewComplex64Set()},
+		{NewComplex64Set(1, 2), NewComplex64Set(1, 2)},
+	}
+	for _, c := range cases {
+		got := c.set.Clone()
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_AsSlice(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		want []complex64
+	}{
+		{NewComplex64Set(), []complex64{}},
+		{NewComplex64Set(1, 2), []complex64{1, 2}},
+	}
+	for _, c := range cases {
+		got := c.set.AsSlice()
+		if len(got) != len(c.want) || !NewComplex64Set(got...).Equals(NewComplex64Set(c.want...)) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_String(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		want []string
+	}{
+		{NewComplex64Set(), []string{"{}"}},
+		{NewComplex64Set(1), []string{"{(1+0i)}"}},
+		{NewComplex64Set(1, 2), []string{"{(1+0i) (2+0i)}", "{(2+0i) (1+0i)}"}},
+	}
+	contains := func(ss []string, s string) bool {
+		for _, v := range ss {
+			if v == s {
+				return true
+			}
+		}
+		return false
+	}
+	for _, c := range cases {
+		got := c.set.String()
+		if !contains(c.want, got) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_Equals(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want bool
+	}{
+		{NewComplex64Set(), NewComplex64Set(), true},
+		{NewComplex64Set(1, 2), NewComplex64Set(2, 1), true},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), false},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), false},
+		{NewComplex64Set(1), NewComplex64Set(2), false},
+	}
+	for _, c := range cases {
+		got := c.set.Equals(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_Union(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want Complex64Set
+	}{
+		{NewComplex64Set(), NewComplex64Set(), NewComplex64Set()},
+		{NewComplex64Set(1), NewComplex64Set(1), NewComplex64Set(1)},
+		{NewComplex64Set(1), NewComplex64Set(2), NewComplex64Set(1, 2)},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), NewComplex64Set(1, 2)},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), NewComplex64Set(1, 2)},
+	}
+	for _, c := range cases {
+		got := c.set.Union(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_Intersection(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want Complex64Set
+	}{
+		{NewComplex64Set(), NewComplex64Set(), NewComplex64Set()},
+		{NewComplex64Set(1), NewComplex64Set(1), NewComplex64Set(1)},
+		{NewComplex64Set(1), NewComplex64Set(2), NewComplex64Set()},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), NewComplex64Set(1)},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), NewComplex64Set(1)},
+	}
+	for _, c := range cases {
+		got := c.set.Intersection(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_Difference(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want Complex64Set
+	}{
+		{NewComplex64Set(), NewComplex64Set(), NewComplex64Set()},
+		{NewComplex64Set(1), NewComplex64Set(1), NewComplex64Set()},
+		{NewComplex64Set(1), NewComplex64Set(2), NewComplex64Set(1)},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), NewComplex64Set()},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), NewComplex64Set(2)},
+	}
+	for _, c := range cases {
+		got := c.set.Difference(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_IsSubsetOf(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want bool
+	}{
+		{NewComplex64Set(), NewComplex64Set(), true},
+		{NewComplex64Set(1), NewComplex64Set(1), true},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), true},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsSubsetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_IsProperSubsetOf(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want bool
+	}{
+		{NewComplex64Set(), NewComplex64Set(), false},
+		{NewComplex64Set(1), NewComplex64Set(1), false},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), true},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsProperSubsetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_IsSupersetOf(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want bool
+	}{
+		{NewComplex64Set(), NewComplex64Set(), true},
+		{NewComplex64Set(1), NewComplex64Set(1), true},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), false},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), true},
+	}
+	for _, c := range cases {
+		got := c.set.IsSupersetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_IsProperSupersetOf(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want bool
+	}{
+		{NewComplex64Set(), NewComplex64Set(), false},
+		{NewComplex64Set(1), NewComplex64Set(1), false},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), false},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), true},
+	}
+	for _, c := range cases {
+		got := c.set.IsProperSupersetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestComplex64Set_IsDisjointFrom(t *testing.T) {
+	cases := []struct {
+		set  Complex64Set
+		arg  Complex64Set
+		want bool
+	}{
+		{NewComplex64Set(), NewComplex64Set(), true},
+		{NewComplex64Set(1), NewComplex64Set(1), false},
+		{NewComplex64Set(1), NewComplex64Set(2, 3), true},
+		{NewComplex64Set(1, 2), NewComplex64Set(3), true},
+		{NewComplex64Set(1), NewComplex64Set(1, 2), false},
+		{NewComplex64Set(1, 2), NewComplex64Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsDisjointFrom(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }

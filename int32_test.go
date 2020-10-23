@@ -1,204 +1,369 @@
 package menge
 
-import "testing"
+import (
+	"testing"
+)
 
-func TestInt32SetBasics(t *testing.T) {
-	// NewInt32Set() -> {}
-	s := NewInt32Set()
-	if s.Has(1) {
-		t.Error("NewInt32Set() Has(1) got: true - want: false - expected set: {}")
+func TestNewInt32Set(t *testing.T) {
+	cases := []struct {
+		arg  []int32
+		want Int32Set
+	}{
+		{[]int32{}, Int32Set{}},
+		{[]int32{1, 1}, Int32Set{1: struct{}{}}},
+		{[]int32{1, 2}, Int32Set{1: struct{}{}, 2: struct{}{}}},
 	}
-	if z := s.Size(); z != 0 {
-		t.Errorf("NewInt32Set() Size() got: %v - want: 0 - expected set: {}", z)
-	}
-	if !s.IsEmpty() {
-		t.Error("NewInt32Set() IsEmpty() got: false - want: true - expected set: {}")
-	}
-	if a := s.AsSlice(); len(a) != 0 {
-		t.Errorf("NewInt32Set() AsSlice() got: %v - want: [] - expected set: {}", a)
-	}
-	if r := s.String(); r != "{}" {
-		t.Errorf("NewInt32Set() String() got: %v - want: {} - expected set: {}", r)
-	}
-	// NewInt32Set() Add(1, 2, 1) -> {1 2}
-	s.Add(1, 2, 1)
-	if !s.Has(1) {
-		t.Error("NewInt32Set() Add(1, 2, 1) Has(1) got: false - want: true - expected set: {1 2}")
-	}
-	if !s.Has(2) {
-		t.Error("NewInt32Set() Add(1, 2, 1) Has(2) got: false - want: true - expected set: {1 2}")
-	}
-	if z := s.Size(); z != 2 {
-		t.Errorf("NewInt32Set() Add(1, 2, 1) Size() got: %v - want: 2 - expected set: {1 2}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewInt32Set() Add(1, 2, 1) IsEmpty() got: true - want: false - expected set: {1 2}")
-	}
-	if a := s.AsSlice(); len(a) != 2 || !((a[0] == 1 && a[1] == 2) || (a[0] == 2 && a[1] == 1)) {
-		t.Errorf("NewInt32Set() Add(1, 2, 1) AsSlice() got: %v - want: [1 2] or [2 1] - expected set: {1 2}", a)
-	}
-	if r := s.String(); r != "{1 2}" && r != "{2 1}" {
-		t.Errorf("NewInt32Set() Add(1, 2, 1) String() got: %v - want: {1 2} or {2 1} - expected set: {1 2}", r)
-	}
-	// NewInt32Set() Add(1, 2, 1) Remove(2, 2) -> {1}
-	s.Remove(2, 2)
-	if !s.Has(1) {
-		t.Error("NewInt32Set() Add(1, 2, 1) Remove(2, 2) Has(1) got: false - want: true - expected set: {1}")
-	}
-	if s.Has(2) {
-		t.Error("NewInt32Set() Add(1, 2, 1) Remove(2, 2) Has(2) got: true - want: false - expected set: {1}")
-	}
-	if z := s.Size(); z != 1 {
-		t.Errorf("NewInt32Set() Add(1, 2, 1) Remove(2, 2) Size() got: %v - want: 1 - expected set: {1}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewInt32Set() Add(1, 2, 1) Remove(2, 2) IsEmpty() got: true - want: false - expected set: {1}")
-	}
-	if a := s.AsSlice(); len(a) != 1 || a[0] != 1 {
-		t.Errorf("NewInt32Set() Add(1, 2, 1) Remove(2, 2) AsSlice() got: %v - want: [1] - expected set: {1}", a)
-	}
-	if r := s.String(); r != "{1}" {
-		t.Errorf("NewInt32Set() Add(1, 2, 1) Remove(2, 2) String() got: %v - want: {1} - expected set: {1}", r)
-	}
-	// NewInt32Set(2, 1, 2) -> {1 2}
-	s = NewInt32Set(2, 1, 2)
-	if !s.Has(1) {
-		t.Error("NewInt32Set(2, 1, 2) Has(1) got: false - want: true - expected set: {1 2}")
-	}
-	if !s.Has(2) {
-		t.Error("NewInt32Set(2, 1, 2) Has(2) got: false - want: true - expected set: {1 2}")
-	}
-	if z := s.Size(); z != 2 {
-		t.Errorf("NewInt32Set(2, 1, 2) Size() got: %v - want: 2 - expected set: {1 2}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewInt32Set(2, 1, 2) IsEmpty() got: true - want: false - expected set: {1 2}")
-	}
-	if a := s.AsSlice(); len(a) != 2 || !((a[0] == 1 && a[1] == 2) || (a[0] == 2 && a[1] == 1)) {
-		t.Errorf("NewInt32Set(2, 1, 2) AsSlice() got: %v - want: [1 2] or [2 1] - expected set: {1 2}", a)
-	}
-	if r := s.String(); r != "{1 2}" && r != "{2 1}" {
-		t.Errorf("NewInt32Set(2, 1, 2) String() got: %v - want: {1 2} or {2 1} - expected set: {1 2}", r)
-	}
-	// NewInt32Set(2, 1, 2) Empty() -> {}
-	s.Empty()
-	if !s.IsEmpty() {
-		t.Error("NewInt32Set(2, 1, 2) Empty() IsEmpty() got: false - want: true - expected set: {}")
-	}
-	// NewInt32Set(2, 1, 2) Empty() Empty() -> {}
-	s.Empty()
-	if !s.IsEmpty() {
-		t.Error("NewInt32Set(2, 1, 2) Empty() Empty() IsEmpty() got: false - want: true - expected set: {}")
+	for _, c := range cases {
+		got := NewInt32Set(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestInt32SetEquals(t *testing.T) {
-	a := NewInt32Set()
-	b := NewInt32Set()
-	if !a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: false - want: true", a, b)
+func TestInt32Set_Add(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  []int32
+		want Int32Set
+	}{
+		{NewInt32Set(), []int32{}, NewInt32Set()},
+		{NewInt32Set(), []int32{1, 1}, NewInt32Set(1)},
+		{NewInt32Set(), []int32{1, 2}, NewInt32Set(1, 2)},
+		{NewInt32Set(1), []int32{}, NewInt32Set(1)},
+		{NewInt32Set(1), []int32{1, 1}, NewInt32Set(1)},
+		{NewInt32Set(1), []int32{2, 3}, NewInt32Set(1, 2, 3)},
 	}
-	a = NewInt32Set(1, 2)
-	b = NewInt32Set(1, 2)
-	if !a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: false - want: true", a, b)
-	}
-	a = NewInt32Set(1, 2)
-	b = NewInt32Set(2)
-	if a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: true - want: false", a, b)
-	}
-	a = NewInt32Set(1)
-	b = NewInt32Set(2)
-	if a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: true - want: false", a, b)
-	}
-}
-
-func TestInt32SetUnion(t *testing.T) {
-	a := NewInt32Set()
-	b := NewInt32Set()
-	w := NewInt32Set()
-	if g := a.Union(b); !g.Equals(w) {
-		t.Errorf("%v.Union(%v) got: %v - want: %v", a, b, g, w)
-	}
-	a = NewInt32Set(1, 2)
-	b = NewInt32Set(2, 3)
-	w = NewInt32Set(1, 2, 3)
-	if g := a.Union(b); !g.Equals(w) {
-		t.Errorf("%v.Union(%v) got: %v - want: %v", a, b, g, w)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Add(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestInt32SetIntersection(t *testing.T) {
-	a := NewInt32Set()
-	b := NewInt32Set()
-	w := NewInt32Set()
-	if g := a.Intersection(b); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", a, b, g, w)
+func TestInt32Set_Remove(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  []int32
+		want Int32Set
+	}{
+		{NewInt32Set(), []int32{}, NewInt32Set()},
+		{NewInt32Set(1), []int32{1, 1}, NewInt32Set()},
+		{NewInt32Set(1, 2), []int32{1, 2}, NewInt32Set()},
+		{NewInt32Set(1), []int32{}, NewInt32Set(1)},
+		{NewInt32Set(1), []int32{1, 1}, NewInt32Set()},
+		{NewInt32Set(1, 2), []int32{3}, NewInt32Set(1, 2)},
+		{NewInt32Set(1, 2, 3), []int32{2, 3}, NewInt32Set(1)},
 	}
-	a = NewInt32Set(1, 2, 3)
-	b = NewInt32Set(3, 4)
-	w = NewInt32Set(3)
-	if g := a.Intersection(b); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", a, b, g, w)
-	}
-	if g := b.Intersection(a); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", b, a, g, w)
-	}
-}
-
-func TestInt32SetDifference(t *testing.T) {
-	a := NewInt32Set()
-	b := NewInt32Set()
-	w := NewInt32Set()
-	if g := a.Difference(b); !g.Equals(w) {
-		t.Errorf("%v.Difference(%v) got: %v - want: %v", a, b, g, w)
-	}
-	a = NewInt32Set(1, 2)
-	b = NewInt32Set(2, 3)
-	w = NewInt32Set(1)
-	if g := a.Difference(b); !g.Equals(w) {
-		t.Errorf("%v.Difference(%v) got: %v - want: %v", a, b, g, w)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Remove(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestInt32SetIsSubsetOf(t *testing.T) {
-	a := NewInt32Set()
-	b := NewInt32Set()
-	if !a.IsSubsetOf(b) {
-		t.Errorf("%v.IsSubsetOf(%v) got: false - want: true", a, b)
+func TestInt32Set_Empty(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		want Int32Set
+	}{
+		{NewInt32Set(), NewInt32Set()},
+		{NewInt32Set(1, 2), NewInt32Set()},
 	}
-	a = NewInt32Set(1, 2)
-	b = NewInt32Set(1, 2, 3)
-	if !a.IsSubsetOf(b) {
-		t.Errorf("%v.IsSubsetOf(%v) got: false - want: true", a, b)
-	}
-	if b.IsSubsetOf(a) {
-		t.Errorf("%v.IsSubsetOf(%v) got: true - want: false", b, a)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Empty()
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestInt32SetIsDisjointFrom(t *testing.T) {
-	a := NewInt32Set()
-	b := NewInt32Set()
-	if !a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", a, b)
+func TestInt32Set_Has(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  int32
+		want bool
+	}{
+		{NewInt32Set(), 1, false},
+		{NewInt32Set(2), 1, false},
+		{NewInt32Set(1), 1, true},
+		{NewInt32Set(1, 2), 1, true},
 	}
-	a = NewInt32Set(1, 2)
-	b = NewInt32Set(3, 4, 5)
-	if !a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", a, b)
+	for _, c := range cases {
+		got := c.set.Has(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
-	if !b.IsDisjointFrom(a) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", b, a)
+}
+
+func TestInt32Set_Size(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		want int
+	}{
+		{NewInt32Set(), 0},
+		{NewInt32Set(1, 2), 2},
 	}
-	a = NewInt32Set(1, 2)
-	b = NewInt32Set(2, 3, 4)
-	if a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: true - want: false", a, b)
+	for _, c := range cases {
+		got := c.set.Size()
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
-	if b.IsDisjointFrom(a) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: true - want: false", b, a)
+}
+
+func TestInt32Set_IsEmpty(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		want bool
+	}{
+		{NewInt32Set(), true},
+		{NewInt32Set(1, 2), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsEmpty()
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_Clone(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		want Int32Set
+	}{
+		{NewInt32Set(), NewInt32Set()},
+		{NewInt32Set(1, 2), NewInt32Set(1, 2)},
+	}
+	for _, c := range cases {
+		got := c.set.Clone()
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_AsSlice(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		want []int32
+	}{
+		{NewInt32Set(), []int32{}},
+		{NewInt32Set(1, 2), []int32{1, 2}},
+	}
+	for _, c := range cases {
+		got := c.set.AsSlice()
+		if len(got) != len(c.want) || !NewInt32Set(got...).Equals(NewInt32Set(c.want...)) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_String(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		want []string
+	}{
+		{NewInt32Set(), []string{"{}"}},
+		{NewInt32Set(1), []string{"{1}"}},
+		{NewInt32Set(1, 2), []string{"{1 2}", "{2 1}"}},
+	}
+	contains := func(ss []string, s string) bool {
+		for _, v := range ss {
+			if v == s {
+				return true
+			}
+		}
+		return false
+	}
+	for _, c := range cases {
+		got := c.set.String()
+		if !contains(c.want, got) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_Equals(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want bool
+	}{
+		{NewInt32Set(), NewInt32Set(), true},
+		{NewInt32Set(1, 2), NewInt32Set(2, 1), true},
+		{NewInt32Set(1, 2), NewInt32Set(1), false},
+		{NewInt32Set(1), NewInt32Set(1, 2), false},
+		{NewInt32Set(1), NewInt32Set(2), false},
+	}
+	for _, c := range cases {
+		got := c.set.Equals(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_Union(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want Int32Set
+	}{
+		{NewInt32Set(), NewInt32Set(), NewInt32Set()},
+		{NewInt32Set(1), NewInt32Set(1), NewInt32Set(1)},
+		{NewInt32Set(1), NewInt32Set(2), NewInt32Set(1, 2)},
+		{NewInt32Set(1), NewInt32Set(1, 2), NewInt32Set(1, 2)},
+		{NewInt32Set(1, 2), NewInt32Set(1), NewInt32Set(1, 2)},
+	}
+	for _, c := range cases {
+		got := c.set.Union(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_Intersection(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want Int32Set
+	}{
+		{NewInt32Set(), NewInt32Set(), NewInt32Set()},
+		{NewInt32Set(1), NewInt32Set(1), NewInt32Set(1)},
+		{NewInt32Set(1), NewInt32Set(2), NewInt32Set()},
+		{NewInt32Set(1), NewInt32Set(1, 2), NewInt32Set(1)},
+		{NewInt32Set(1, 2), NewInt32Set(1), NewInt32Set(1)},
+	}
+	for _, c := range cases {
+		got := c.set.Intersection(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_Difference(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want Int32Set
+	}{
+		{NewInt32Set(), NewInt32Set(), NewInt32Set()},
+		{NewInt32Set(1), NewInt32Set(1), NewInt32Set()},
+		{NewInt32Set(1), NewInt32Set(2), NewInt32Set(1)},
+		{NewInt32Set(1), NewInt32Set(1, 2), NewInt32Set()},
+		{NewInt32Set(1, 2), NewInt32Set(1), NewInt32Set(2)},
+	}
+	for _, c := range cases {
+		got := c.set.Difference(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_IsSubsetOf(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want bool
+	}{
+		{NewInt32Set(), NewInt32Set(), true},
+		{NewInt32Set(1), NewInt32Set(1), true},
+		{NewInt32Set(1), NewInt32Set(1, 2), true},
+		{NewInt32Set(1, 2), NewInt32Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsSubsetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_IsProperSubsetOf(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want bool
+	}{
+		{NewInt32Set(), NewInt32Set(), false},
+		{NewInt32Set(1), NewInt32Set(1), false},
+		{NewInt32Set(1), NewInt32Set(1, 2), true},
+		{NewInt32Set(1, 2), NewInt32Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsProperSubsetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_IsSupersetOf(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want bool
+	}{
+		{NewInt32Set(), NewInt32Set(), true},
+		{NewInt32Set(1), NewInt32Set(1), true},
+		{NewInt32Set(1), NewInt32Set(1, 2), false},
+		{NewInt32Set(1, 2), NewInt32Set(1), true},
+	}
+	for _, c := range cases {
+		got := c.set.IsSupersetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_IsProperSupersetOf(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want bool
+	}{
+		{NewInt32Set(), NewInt32Set(), false},
+		{NewInt32Set(1), NewInt32Set(1), false},
+		{NewInt32Set(1), NewInt32Set(1, 2), false},
+		{NewInt32Set(1, 2), NewInt32Set(1), true},
+	}
+	for _, c := range cases {
+		got := c.set.IsProperSupersetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestInt32Set_IsDisjointFrom(t *testing.T) {
+	cases := []struct {
+		set  Int32Set
+		arg  Int32Set
+		want bool
+	}{
+		{NewInt32Set(), NewInt32Set(), true},
+		{NewInt32Set(1), NewInt32Set(1), false},
+		{NewInt32Set(1), NewInt32Set(2, 3), true},
+		{NewInt32Set(1, 2), NewInt32Set(3), true},
+		{NewInt32Set(1), NewInt32Set(1, 2), false},
+		{NewInt32Set(1, 2), NewInt32Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsDisjointFrom(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }

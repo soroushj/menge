@@ -1,204 +1,369 @@
 package menge
 
-import "testing"
+import (
+	"testing"
+)
 
-func TestUInt16SetBasics(t *testing.T) {
-	// NewUInt16Set() -> {}
-	s := NewUInt16Set()
-	if s.Has(1) {
-		t.Error("NewUInt16Set() Has(1) got: true - want: false - expected set: {}")
+func TestNewUInt16Set(t *testing.T) {
+	cases := []struct {
+		arg  []uint16
+		want UInt16Set
+	}{
+		{[]uint16{}, UInt16Set{}},
+		{[]uint16{1, 1}, UInt16Set{1: struct{}{}}},
+		{[]uint16{1, 2}, UInt16Set{1: struct{}{}, 2: struct{}{}}},
 	}
-	if z := s.Size(); z != 0 {
-		t.Errorf("NewUInt16Set() Size() got: %v - want: 0 - expected set: {}", z)
-	}
-	if !s.IsEmpty() {
-		t.Error("NewUInt16Set() IsEmpty() got: false - want: true - expected set: {}")
-	}
-	if a := s.AsSlice(); len(a) != 0 {
-		t.Errorf("NewUInt16Set() AsSlice() got: %v - want: [] - expected set: {}", a)
-	}
-	if r := s.String(); r != "{}" {
-		t.Errorf("NewUInt16Set() String() got: %v - want: {} - expected set: {}", r)
-	}
-	// NewUInt16Set() Add(1, 2, 1) -> {1 2}
-	s.Add(1, 2, 1)
-	if !s.Has(1) {
-		t.Error("NewUInt16Set() Add(1, 2, 1) Has(1) got: false - want: true - expected set: {1 2}")
-	}
-	if !s.Has(2) {
-		t.Error("NewUInt16Set() Add(1, 2, 1) Has(2) got: false - want: true - expected set: {1 2}")
-	}
-	if z := s.Size(); z != 2 {
-		t.Errorf("NewUInt16Set() Add(1, 2, 1) Size() got: %v - want: 2 - expected set: {1 2}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewUInt16Set() Add(1, 2, 1) IsEmpty() got: true - want: false - expected set: {1 2}")
-	}
-	if a := s.AsSlice(); len(a) != 2 || !((a[0] == 1 && a[1] == 2) || (a[0] == 2 && a[1] == 1)) {
-		t.Errorf("NewUInt16Set() Add(1, 2, 1) AsSlice() got: %v - want: [1 2] or [2 1] - expected set: {1 2}", a)
-	}
-	if r := s.String(); r != "{1 2}" && r != "{2 1}" {
-		t.Errorf("NewUInt16Set() Add(1, 2, 1) String() got: %v - want: {1 2} or {2 1} - expected set: {1 2}", r)
-	}
-	// NewUInt16Set() Add(1, 2, 1) Remove(2, 2) -> {1}
-	s.Remove(2, 2)
-	if !s.Has(1) {
-		t.Error("NewUInt16Set() Add(1, 2, 1) Remove(2, 2) Has(1) got: false - want: true - expected set: {1}")
-	}
-	if s.Has(2) {
-		t.Error("NewUInt16Set() Add(1, 2, 1) Remove(2, 2) Has(2) got: true - want: false - expected set: {1}")
-	}
-	if z := s.Size(); z != 1 {
-		t.Errorf("NewUInt16Set() Add(1, 2, 1) Remove(2, 2) Size() got: %v - want: 1 - expected set: {1}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewUInt16Set() Add(1, 2, 1) Remove(2, 2) IsEmpty() got: true - want: false - expected set: {1}")
-	}
-	if a := s.AsSlice(); len(a) != 1 || a[0] != 1 {
-		t.Errorf("NewUInt16Set() Add(1, 2, 1) Remove(2, 2) AsSlice() got: %v - want: [1] - expected set: {1}", a)
-	}
-	if r := s.String(); r != "{1}" {
-		t.Errorf("NewUInt16Set() Add(1, 2, 1) Remove(2, 2) String() got: %v - want: {1} - expected set: {1}", r)
-	}
-	// NewUInt16Set(2, 1, 2) -> {1 2}
-	s = NewUInt16Set(2, 1, 2)
-	if !s.Has(1) {
-		t.Error("NewUInt16Set(2, 1, 2) Has(1) got: false - want: true - expected set: {1 2}")
-	}
-	if !s.Has(2) {
-		t.Error("NewUInt16Set(2, 1, 2) Has(2) got: false - want: true - expected set: {1 2}")
-	}
-	if z := s.Size(); z != 2 {
-		t.Errorf("NewUInt16Set(2, 1, 2) Size() got: %v - want: 2 - expected set: {1 2}", z)
-	}
-	if s.IsEmpty() {
-		t.Error("NewUInt16Set(2, 1, 2) IsEmpty() got: true - want: false - expected set: {1 2}")
-	}
-	if a := s.AsSlice(); len(a) != 2 || !((a[0] == 1 && a[1] == 2) || (a[0] == 2 && a[1] == 1)) {
-		t.Errorf("NewUInt16Set(2, 1, 2) AsSlice() got: %v - want: [1 2] or [2 1] - expected set: {1 2}", a)
-	}
-	if r := s.String(); r != "{1 2}" && r != "{2 1}" {
-		t.Errorf("NewUInt16Set(2, 1, 2) String() got: %v - want: {1 2} or {2 1} - expected set: {1 2}", r)
-	}
-	// NewUInt16Set(2, 1, 2) Empty() -> {}
-	s.Empty()
-	if !s.IsEmpty() {
-		t.Error("NewUInt16Set(2, 1, 2) Empty() IsEmpty() got: false - want: true - expected set: {}")
-	}
-	// NewUInt16Set(2, 1, 2) Empty() Empty() -> {}
-	s.Empty()
-	if !s.IsEmpty() {
-		t.Error("NewUInt16Set(2, 1, 2) Empty() Empty() IsEmpty() got: false - want: true - expected set: {}")
+	for _, c := range cases {
+		got := NewUInt16Set(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestUInt16SetEquals(t *testing.T) {
-	a := NewUInt16Set()
-	b := NewUInt16Set()
-	if !a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: false - want: true", a, b)
+func TestUInt16Set_Add(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  []uint16
+		want UInt16Set
+	}{
+		{NewUInt16Set(), []uint16{}, NewUInt16Set()},
+		{NewUInt16Set(), []uint16{1, 1}, NewUInt16Set(1)},
+		{NewUInt16Set(), []uint16{1, 2}, NewUInt16Set(1, 2)},
+		{NewUInt16Set(1), []uint16{}, NewUInt16Set(1)},
+		{NewUInt16Set(1), []uint16{1, 1}, NewUInt16Set(1)},
+		{NewUInt16Set(1), []uint16{2, 3}, NewUInt16Set(1, 2, 3)},
 	}
-	a = NewUInt16Set(1, 2)
-	b = NewUInt16Set(1, 2)
-	if !a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: false - want: true", a, b)
-	}
-	a = NewUInt16Set(1, 2)
-	b = NewUInt16Set(2)
-	if a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: true - want: false", a, b)
-	}
-	a = NewUInt16Set(1)
-	b = NewUInt16Set(2)
-	if a.Equals(b) {
-		t.Errorf("%v.Equals(%v) got: true - want: false", a, b)
-	}
-}
-
-func TestUInt16SetUnion(t *testing.T) {
-	a := NewUInt16Set()
-	b := NewUInt16Set()
-	w := NewUInt16Set()
-	if g := a.Union(b); !g.Equals(w) {
-		t.Errorf("%v.Union(%v) got: %v - want: %v", a, b, g, w)
-	}
-	a = NewUInt16Set(1, 2)
-	b = NewUInt16Set(2, 3)
-	w = NewUInt16Set(1, 2, 3)
-	if g := a.Union(b); !g.Equals(w) {
-		t.Errorf("%v.Union(%v) got: %v - want: %v", a, b, g, w)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Add(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestUInt16SetIntersection(t *testing.T) {
-	a := NewUInt16Set()
-	b := NewUInt16Set()
-	w := NewUInt16Set()
-	if g := a.Intersection(b); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", a, b, g, w)
+func TestUInt16Set_Remove(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  []uint16
+		want UInt16Set
+	}{
+		{NewUInt16Set(), []uint16{}, NewUInt16Set()},
+		{NewUInt16Set(1), []uint16{1, 1}, NewUInt16Set()},
+		{NewUInt16Set(1, 2), []uint16{1, 2}, NewUInt16Set()},
+		{NewUInt16Set(1), []uint16{}, NewUInt16Set(1)},
+		{NewUInt16Set(1), []uint16{1, 1}, NewUInt16Set()},
+		{NewUInt16Set(1, 2), []uint16{3}, NewUInt16Set(1, 2)},
+		{NewUInt16Set(1, 2, 3), []uint16{2, 3}, NewUInt16Set(1)},
 	}
-	a = NewUInt16Set(1, 2, 3)
-	b = NewUInt16Set(3, 4)
-	w = NewUInt16Set(3)
-	if g := a.Intersection(b); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", a, b, g, w)
-	}
-	if g := b.Intersection(a); !g.Equals(w) {
-		t.Errorf("%v.Intersection(%v) got: %v - want: %v", b, a, g, w)
-	}
-}
-
-func TestUInt16SetDifference(t *testing.T) {
-	a := NewUInt16Set()
-	b := NewUInt16Set()
-	w := NewUInt16Set()
-	if g := a.Difference(b); !g.Equals(w) {
-		t.Errorf("%v.Difference(%v) got: %v - want: %v", a, b, g, w)
-	}
-	a = NewUInt16Set(1, 2)
-	b = NewUInt16Set(2, 3)
-	w = NewUInt16Set(1)
-	if g := a.Difference(b); !g.Equals(w) {
-		t.Errorf("%v.Difference(%v) got: %v - want: %v", a, b, g, w)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Remove(c.arg...)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestUInt16SetIsSubsetOf(t *testing.T) {
-	a := NewUInt16Set()
-	b := NewUInt16Set()
-	if !a.IsSubsetOf(b) {
-		t.Errorf("%v.IsSubsetOf(%v) got: false - want: true", a, b)
+func TestUInt16Set_Empty(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		want UInt16Set
+	}{
+		{NewUInt16Set(), NewUInt16Set()},
+		{NewUInt16Set(1, 2), NewUInt16Set()},
 	}
-	a = NewUInt16Set(1, 2)
-	b = NewUInt16Set(1, 2, 3)
-	if !a.IsSubsetOf(b) {
-		t.Errorf("%v.IsSubsetOf(%v) got: false - want: true", a, b)
-	}
-	if b.IsSubsetOf(a) {
-		t.Errorf("%v.IsSubsetOf(%v) got: true - want: false", b, a)
+	for _, c := range cases {
+		got := c.set.Clone()
+		got.Empty()
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
 
-func TestUInt16SetIsDisjointFrom(t *testing.T) {
-	a := NewUInt16Set()
-	b := NewUInt16Set()
-	if !a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", a, b)
+func TestUInt16Set_Has(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  uint16
+		want bool
+	}{
+		{NewUInt16Set(), 1, false},
+		{NewUInt16Set(2), 1, false},
+		{NewUInt16Set(1), 1, true},
+		{NewUInt16Set(1, 2), 1, true},
 	}
-	a = NewUInt16Set(1, 2)
-	b = NewUInt16Set(3, 4, 5)
-	if !a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", a, b)
+	for _, c := range cases {
+		got := c.set.Has(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
-	if !b.IsDisjointFrom(a) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: false - want: true", b, a)
+}
+
+func TestUInt16Set_Size(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		want int
+	}{
+		{NewUInt16Set(), 0},
+		{NewUInt16Set(1, 2), 2},
 	}
-	a = NewUInt16Set(1, 2)
-	b = NewUInt16Set(2, 3, 4)
-	if a.IsDisjointFrom(b) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: true - want: false", a, b)
+	for _, c := range cases {
+		got := c.set.Size()
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
-	if b.IsDisjointFrom(a) {
-		t.Errorf("%v.IsDisjointFrom(%v) got: true - want: false", b, a)
+}
+
+func TestUInt16Set_IsEmpty(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		want bool
+	}{
+		{NewUInt16Set(), true},
+		{NewUInt16Set(1, 2), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsEmpty()
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_Clone(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		want UInt16Set
+	}{
+		{NewUInt16Set(), NewUInt16Set()},
+		{NewUInt16Set(1, 2), NewUInt16Set(1, 2)},
+	}
+	for _, c := range cases {
+		got := c.set.Clone()
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_AsSlice(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		want []uint16
+	}{
+		{NewUInt16Set(), []uint16{}},
+		{NewUInt16Set(1, 2), []uint16{1, 2}},
+	}
+	for _, c := range cases {
+		got := c.set.AsSlice()
+		if len(got) != len(c.want) || !NewUInt16Set(got...).Equals(NewUInt16Set(c.want...)) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_String(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		want []string
+	}{
+		{NewUInt16Set(), []string{"{}"}},
+		{NewUInt16Set(1), []string{"{1}"}},
+		{NewUInt16Set(1, 2), []string{"{1 2}", "{2 1}"}},
+	}
+	contains := func(ss []string, s string) bool {
+		for _, v := range ss {
+			if v == s {
+				return true
+			}
+		}
+		return false
+	}
+	for _, c := range cases {
+		got := c.set.String()
+		if !contains(c.want, got) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_Equals(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want bool
+	}{
+		{NewUInt16Set(), NewUInt16Set(), true},
+		{NewUInt16Set(1, 2), NewUInt16Set(2, 1), true},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), false},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), false},
+		{NewUInt16Set(1), NewUInt16Set(2), false},
+	}
+	for _, c := range cases {
+		got := c.set.Equals(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_Union(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want UInt16Set
+	}{
+		{NewUInt16Set(), NewUInt16Set(), NewUInt16Set()},
+		{NewUInt16Set(1), NewUInt16Set(1), NewUInt16Set(1)},
+		{NewUInt16Set(1), NewUInt16Set(2), NewUInt16Set(1, 2)},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), NewUInt16Set(1, 2)},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), NewUInt16Set(1, 2)},
+	}
+	for _, c := range cases {
+		got := c.set.Union(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_Intersection(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want UInt16Set
+	}{
+		{NewUInt16Set(), NewUInt16Set(), NewUInt16Set()},
+		{NewUInt16Set(1), NewUInt16Set(1), NewUInt16Set(1)},
+		{NewUInt16Set(1), NewUInt16Set(2), NewUInt16Set()},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), NewUInt16Set(1)},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), NewUInt16Set(1)},
+	}
+	for _, c := range cases {
+		got := c.set.Intersection(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_Difference(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want UInt16Set
+	}{
+		{NewUInt16Set(), NewUInt16Set(), NewUInt16Set()},
+		{NewUInt16Set(1), NewUInt16Set(1), NewUInt16Set()},
+		{NewUInt16Set(1), NewUInt16Set(2), NewUInt16Set(1)},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), NewUInt16Set()},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), NewUInt16Set(2)},
+	}
+	for _, c := range cases {
+		got := c.set.Difference(c.arg)
+		if !got.Equals(c.want) {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_IsSubsetOf(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want bool
+	}{
+		{NewUInt16Set(), NewUInt16Set(), true},
+		{NewUInt16Set(1), NewUInt16Set(1), true},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), true},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsSubsetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_IsProperSubsetOf(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want bool
+	}{
+		{NewUInt16Set(), NewUInt16Set(), false},
+		{NewUInt16Set(1), NewUInt16Set(1), false},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), true},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsProperSubsetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_IsSupersetOf(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want bool
+	}{
+		{NewUInt16Set(), NewUInt16Set(), true},
+		{NewUInt16Set(1), NewUInt16Set(1), true},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), false},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), true},
+	}
+	for _, c := range cases {
+		got := c.set.IsSupersetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_IsProperSupersetOf(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want bool
+	}{
+		{NewUInt16Set(), NewUInt16Set(), false},
+		{NewUInt16Set(1), NewUInt16Set(1), false},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), false},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), true},
+	}
+	for _, c := range cases {
+		got := c.set.IsProperSupersetOf(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
+	}
+}
+
+func TestUInt16Set_IsDisjointFrom(t *testing.T) {
+	cases := []struct {
+		set  UInt16Set
+		arg  UInt16Set
+		want bool
+	}{
+		{NewUInt16Set(), NewUInt16Set(), true},
+		{NewUInt16Set(1), NewUInt16Set(1), false},
+		{NewUInt16Set(1), NewUInt16Set(2, 3), true},
+		{NewUInt16Set(1, 2), NewUInt16Set(3), true},
+		{NewUInt16Set(1), NewUInt16Set(1, 2), false},
+		{NewUInt16Set(1, 2), NewUInt16Set(1), false},
+	}
+	for _, c := range cases {
+		got := c.set.IsDisjointFrom(c.arg)
+		if got != c.want {
+			t.Errorf("case: %v got: %v", c, got)
+		}
 	}
 }
