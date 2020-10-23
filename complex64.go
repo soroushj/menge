@@ -45,6 +45,15 @@ func (s Complex64Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s Complex64Set) Clone() Complex64Set {
+	c := make(Complex64Set, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s Complex64Set) AsSlice() []complex64 {
 	a := make([]complex64, len(s))

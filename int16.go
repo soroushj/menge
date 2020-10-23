@@ -45,6 +45,15 @@ func (s Int16Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s Int16Set) Clone() Int16Set {
+	c := make(Int16Set, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s Int16Set) AsSlice() []int16 {
 	a := make([]int16, len(s))

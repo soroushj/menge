@@ -45,6 +45,15 @@ func (s IntSet) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s IntSet) Clone() IntSet {
+	c := make(IntSet, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s IntSet) AsSlice() []int {
 	a := make([]int, len(s))

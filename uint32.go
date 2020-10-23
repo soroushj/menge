@@ -45,6 +45,15 @@ func (s UInt32Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s UInt32Set) Clone() UInt32Set {
+	c := make(UInt32Set, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s UInt32Set) AsSlice() []uint32 {
 	a := make([]uint32, len(s))

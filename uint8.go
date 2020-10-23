@@ -45,6 +45,15 @@ func (s UInt8Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s UInt8Set) Clone() UInt8Set {
+	c := make(UInt8Set, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s UInt8Set) AsSlice() []uint8 {
 	a := make([]uint8, len(s))

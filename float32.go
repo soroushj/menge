@@ -45,6 +45,15 @@ func (s Float32Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s Float32Set) Clone() Float32Set {
+	c := make(Float32Set, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s Float32Set) AsSlice() []float32 {
 	a := make([]float32, len(s))

@@ -45,6 +45,15 @@ func (s Complex128Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s Complex128Set) Clone() Complex128Set {
+	c := make(Complex128Set, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s Complex128Set) AsSlice() []complex128 {
 	a := make([]complex128, len(s))

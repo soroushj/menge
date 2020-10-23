@@ -45,6 +45,15 @@ func (s Int64Set) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s Int64Set) Clone() Int64Set {
+	c := make(Int64Set, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s Int64Set) AsSlice() []int64 {
 	a := make([]int64, len(s))

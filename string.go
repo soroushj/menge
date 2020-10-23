@@ -45,6 +45,15 @@ func (s StringSet) IsEmpty() bool {
 	return len(s) == 0
 }
 
+// Clone returns a clone of the set.
+func (s StringSet) Clone() StringSet {
+	c := make(StringSet, len(s))
+	for e := range s {
+		c[e] = struct{}{}
+	}
+	return c
+}
+
 // AsSlice returns an equivalent slice with no specific order of the elements.
 func (s StringSet) AsSlice() []string {
 	a := make([]string, len(s))
