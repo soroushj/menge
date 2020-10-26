@@ -7,10 +7,10 @@ import (
 )
 
 // Float32Set represents a set of float32 elements.
-// Ignores NaN values.
 type Float32Set map[float32]struct{}
 
 // Add adds zero or more elements to the set.
+// Ignores NaN values.
 func (s Float32Set) Add(elems ...float32) {
 	for _, e := range elems {
 		if !math.IsNaN(float64(e)) {
