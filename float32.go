@@ -2,16 +2,20 @@ package menge
 
 import (
 	"fmt"
+	"math"
 	"strings"
 )
 
 // Float32Set represents a set of float32 elements.
+// Ignores NaN values.
 type Float32Set map[float32]struct{}
 
 // Add adds zero or more elements to the set.
 func (s Float32Set) Add(elems ...float32) {
 	for _, e := range elems {
-		s[e] = struct{}{}
+		if !math.IsNaN(float64(e)) {
+			s[e] = struct{}{}
+		}
 	}
 }
 
@@ -193,6 +197,7 @@ func (s Float32Set) IsDisjointFrom(t Float32Set) bool {
 }
 
 // NewFloat32Set returns a new Float32Set containing zero or more elements.
+// Ignores NaN values.
 func NewFloat32Set(elems ...float32) Float32Set {
 	s := make(Float32Set, len(elems))
 	s.Add(elems...)

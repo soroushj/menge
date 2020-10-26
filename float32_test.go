@@ -1,6 +1,7 @@
 package menge
 
 import (
+	"math"
 	"testing"
 )
 
@@ -12,6 +13,7 @@ func TestNewFloat32Set(t *testing.T) {
 		{[]float32{}, Float32Set{}},
 		{[]float32{1, 1}, Float32Set{1: struct{}{}}},
 		{[]float32{1, 2}, Float32Set{1: struct{}{}, 2: struct{}{}}},
+		{[]float32{float32(math.NaN())}, Float32Set{}},
 	}
 	for _, c := range cases {
 		got := NewFloat32Set(c.arg...)
@@ -33,6 +35,7 @@ func TestFloat32Set_Add(t *testing.T) {
 		{NewFloat32Set(1), []float32{}, NewFloat32Set(1)},
 		{NewFloat32Set(1), []float32{1, 1}, NewFloat32Set(1)},
 		{NewFloat32Set(1), []float32{2, 3}, NewFloat32Set(1, 2, 3)},
+		{NewFloat32Set(), []float32{float32(math.NaN())}, NewFloat32Set()},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()

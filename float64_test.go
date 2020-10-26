@@ -1,6 +1,7 @@
 package menge
 
 import (
+	"math"
 	"testing"
 )
 
@@ -12,6 +13,7 @@ func TestNewFloat64Set(t *testing.T) {
 		{[]float64{}, Float64Set{}},
 		{[]float64{1, 1}, Float64Set{1: struct{}{}}},
 		{[]float64{1, 2}, Float64Set{1: struct{}{}, 2: struct{}{}}},
+		{[]float64{math.NaN()}, Float64Set{}},
 	}
 	for _, c := range cases {
 		got := NewFloat64Set(c.arg...)
@@ -33,6 +35,7 @@ func TestFloat64Set_Add(t *testing.T) {
 		{NewFloat64Set(1), []float64{}, NewFloat64Set(1)},
 		{NewFloat64Set(1), []float64{1, 1}, NewFloat64Set(1)},
 		{NewFloat64Set(1), []float64{2, 3}, NewFloat64Set(1, 2, 3)},
+		{NewFloat64Set(), []float64{math.NaN()}, NewFloat64Set()},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()

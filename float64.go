@@ -2,6 +2,7 @@ package menge
 
 import (
 	"fmt"
+	"math"
 	"strings"
 )
 
@@ -9,9 +10,12 @@ import (
 type Float64Set map[float64]struct{}
 
 // Add adds zero or more elements to the set.
+// Ignores NaN values.
 func (s Float64Set) Add(elems ...float64) {
 	for _, e := range elems {
-		s[e] = struct{}{}
+		if !math.IsNaN(e) {
+			s[e] = struct{}{}
+		}
 	}
 }
 
@@ -193,6 +197,7 @@ func (s Float64Set) IsDisjointFrom(t Float64Set) bool {
 }
 
 // NewFloat64Set returns a new Float64Set containing zero or more elements.
+// Ignores NaN values.
 func NewFloat64Set(elems ...float64) Float64Set {
 	s := make(Float64Set, len(elems))
 	s.Add(elems...)
