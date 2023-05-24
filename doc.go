@@ -1,2 +1,2 @@
-// Package menge implements efficient sets of all basic types.
+// Package menge implements type-safe sets of all basic types.
 package menge
