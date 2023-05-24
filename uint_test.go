@@ -1,20 +1,22 @@
-package menge
+package menge_test
 
 import (
 	"testing"
+
+	"github.com/soroushj/menge"
 )
 
 func TestNewUIntSet(t *testing.T) {
 	cases := []struct {
 		arg  []uint
-		want UIntSet
+		want menge.UIntSet
 	}{
-		{[]uint{}, UIntSet{}},
-		{[]uint{1, 1}, UIntSet{1: struct{}{}}},
-		{[]uint{1, 2}, UIntSet{1: struct{}{}, 2: struct{}{}}},
+		{[]uint{}, menge.UIntSet{}},
+		{[]uint{1, 1}, menge.UIntSet{1: struct{}{}}},
+		{[]uint{1, 2}, menge.UIntSet{1: struct{}{}, 2: struct{}{}}},
 	}
 	for _, c := range cases {
-		got := NewUIntSet(c.arg...)
+		got := menge.NewUIntSet(c.arg...)
 		if !got.Equals(c.want) {
 			t.Errorf("case: %v got: %v", c, got)
 		}
@@ -23,16 +25,16 @@ func TestNewUIntSet(t *testing.T) {
 
 func TestUIntSet_Add(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
+		set  menge.UIntSet
 		arg  []uint
-		want UIntSet
+		want menge.UIntSet
 	}{
-		{NewUIntSet(), []uint{}, NewUIntSet()},
-		{NewUIntSet(), []uint{1, 1}, NewUIntSet(1)},
-		{NewUIntSet(), []uint{1, 2}, NewUIntSet(1, 2)},
-		{NewUIntSet(1), []uint{}, NewUIntSet(1)},
-		{NewUIntSet(1), []uint{1, 1}, NewUIntSet(1)},
-		{NewUIntSet(1), []uint{2, 3}, NewUIntSet(1, 2, 3)},
+		{menge.NewUIntSet(), []uint{}, menge.NewUIntSet()},
+		{menge.NewUIntSet(), []uint{1, 1}, menge.NewUIntSet(1)},
+		{menge.NewUIntSet(), []uint{1, 2}, menge.NewUIntSet(1, 2)},
+		{menge.NewUIntSet(1), []uint{}, menge.NewUIntSet(1)},
+		{menge.NewUIntSet(1), []uint{1, 1}, menge.NewUIntSet(1)},
+		{menge.NewUIntSet(1), []uint{2, 3}, menge.NewUIntSet(1, 2, 3)},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -45,17 +47,17 @@ func TestUIntSet_Add(t *testing.T) {
 
 func TestUIntSet_Remove(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
+		set  menge.UIntSet
 		arg  []uint
-		want UIntSet
+		want menge.UIntSet
 	}{
-		{NewUIntSet(), []uint{}, NewUIntSet()},
-		{NewUIntSet(1), []uint{1, 1}, NewUIntSet()},
-		{NewUIntSet(1, 2), []uint{1, 2}, NewUIntSet()},
-		{NewUIntSet(1), []uint{}, NewUIntSet(1)},
-		{NewUIntSet(1), []uint{1, 1}, NewUIntSet()},
-		{NewUIntSet(1, 2), []uint{3}, NewUIntSet(1, 2)},
-		{NewUIntSet(1, 2, 3), []uint{2, 3}, NewUIntSet(1)},
+		{menge.NewUIntSet(), []uint{}, menge.NewUIntSet()},
+		{menge.NewUIntSet(1), []uint{1, 1}, menge.NewUIntSet()},
+		{menge.NewUIntSet(1, 2), []uint{1, 2}, menge.NewUIntSet()},
+		{menge.NewUIntSet(1), []uint{}, menge.NewUIntSet(1)},
+		{menge.NewUIntSet(1), []uint{1, 1}, menge.NewUIntSet()},
+		{menge.NewUIntSet(1, 2), []uint{3}, menge.NewUIntSet(1, 2)},
+		{menge.NewUIntSet(1, 2, 3), []uint{2, 3}, menge.NewUIntSet(1)},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -68,11 +70,11 @@ func TestUIntSet_Remove(t *testing.T) {
 
 func TestUIntSet_Empty(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		want UIntSet
+		set  menge.UIntSet
+		want menge.UIntSet
 	}{
-		{NewUIntSet(), NewUIntSet()},
-		{NewUIntSet(1, 2), NewUIntSet()},
+		{menge.NewUIntSet(), menge.NewUIntSet()},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet()},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -85,14 +87,14 @@ func TestUIntSet_Empty(t *testing.T) {
 
 func TestUIntSet_Has(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
+		set  menge.UIntSet
 		arg  uint
 		want bool
 	}{
-		{NewUIntSet(), 1, false},
-		{NewUIntSet(2), 1, false},
-		{NewUIntSet(1), 1, true},
-		{NewUIntSet(1, 2), 1, true},
+		{menge.NewUIntSet(), 1, false},
+		{menge.NewUIntSet(2), 1, false},
+		{menge.NewUIntSet(1), 1, true},
+		{menge.NewUIntSet(1, 2), 1, true},
 	}
 	for _, c := range cases {
 		got := c.set.Has(c.arg)
@@ -104,11 +106,11 @@ func TestUIntSet_Has(t *testing.T) {
 
 func TestUIntSet_Size(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
+		set  menge.UIntSet
 		want int
 	}{
-		{NewUIntSet(), 0},
-		{NewUIntSet(1, 2), 2},
+		{menge.NewUIntSet(), 0},
+		{menge.NewUIntSet(1, 2), 2},
 	}
 	for _, c := range cases {
 		got := c.set.Size()
@@ -120,11 +122,11 @@ func TestUIntSet_Size(t *testing.T) {
 
 func TestUIntSet_IsEmpty(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
+		set  menge.UIntSet
 		want bool
 	}{
-		{NewUIntSet(), true},
-		{NewUIntSet(1, 2), false},
+		{menge.NewUIntSet(), true},
+		{menge.NewUIntSet(1, 2), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsEmpty()
@@ -136,11 +138,11 @@ func TestUIntSet_IsEmpty(t *testing.T) {
 
 func TestUIntSet_Clone(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		want UIntSet
+		set  menge.UIntSet
+		want menge.UIntSet
 	}{
-		{NewUIntSet(), NewUIntSet()},
-		{NewUIntSet(1, 2), NewUIntSet(1, 2)},
+		{menge.NewUIntSet(), menge.NewUIntSet()},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1, 2)},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -152,15 +154,15 @@ func TestUIntSet_Clone(t *testing.T) {
 
 func TestUIntSet_AsSlice(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
+		set  menge.UIntSet
 		want []uint
 	}{
-		{NewUIntSet(), []uint{}},
-		{NewUIntSet(1, 2), []uint{1, 2}},
+		{menge.NewUIntSet(), []uint{}},
+		{menge.NewUIntSet(1, 2), []uint{1, 2}},
 	}
 	for _, c := range cases {
 		got := c.set.AsSlice()
-		if len(got) != len(c.want) || !NewUIntSet(got...).Equals(NewUIntSet(c.want...)) {
+		if len(got) != len(c.want) || !menge.NewUIntSet(got...).Equals(menge.NewUIntSet(c.want...)) {
 			t.Errorf("case: %v got: %v", c, got)
 		}
 	}
@@ -168,12 +170,12 @@ func TestUIntSet_AsSlice(t *testing.T) {
 
 func TestUIntSet_String(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
+		set  menge.UIntSet
 		want []string
 	}{
-		{NewUIntSet(), []string{"{}"}},
-		{NewUIntSet(1), []string{"{1}"}},
-		{NewUIntSet(1, 2), []string{"{1 2}", "{2 1}"}},
+		{menge.NewUIntSet(), []string{"{}"}},
+		{menge.NewUIntSet(1), []string{"{1}"}},
+		{menge.NewUIntSet(1, 2), []string{"{1 2}", "{2 1}"}},
 	}
 	contains := func(ss []string, s string) bool {
 		for _, v := range ss {
@@ -193,15 +195,15 @@ func TestUIntSet_String(t *testing.T) {
 
 func TestUIntSet_Equals(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
 		want bool
 	}{
-		{NewUIntSet(), NewUIntSet(), true},
-		{NewUIntSet(1, 2), NewUIntSet(2, 1), true},
-		{NewUIntSet(1, 2), NewUIntSet(1), false},
-		{NewUIntSet(1), NewUIntSet(1, 2), false},
-		{NewUIntSet(1), NewUIntSet(2), false},
+		{menge.NewUIntSet(), menge.NewUIntSet(), true},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(2, 1), true},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), false},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), false},
+		{menge.NewUIntSet(1), menge.NewUIntSet(2), false},
 	}
 	for _, c := range cases {
 		got := c.set.Equals(c.arg)
@@ -213,15 +215,15 @@ func TestUIntSet_Equals(t *testing.T) {
 
 func TestUIntSet_Union(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
-		want UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
+		want menge.UIntSet
 	}{
-		{NewUIntSet(), NewUIntSet(), NewUIntSet()},
-		{NewUIntSet(1), NewUIntSet(1), NewUIntSet(1)},
-		{NewUIntSet(1), NewUIntSet(2), NewUIntSet(1, 2)},
-		{NewUIntSet(1), NewUIntSet(1, 2), NewUIntSet(1, 2)},
-		{NewUIntSet(1, 2), NewUIntSet(1), NewUIntSet(1, 2)},
+		{menge.NewUIntSet(), menge.NewUIntSet(), menge.NewUIntSet()},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1), menge.NewUIntSet(1)},
+		{menge.NewUIntSet(1), menge.NewUIntSet(2), menge.NewUIntSet(1, 2)},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), menge.NewUIntSet(1, 2)},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), menge.NewUIntSet(1, 2)},
 	}
 	for _, c := range cases {
 		got := c.set.Union(c.arg)
@@ -233,15 +235,15 @@ func TestUIntSet_Union(t *testing.T) {
 
 func TestUIntSet_Intersection(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
-		want UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
+		want menge.UIntSet
 	}{
-		{NewUIntSet(), NewUIntSet(), NewUIntSet()},
-		{NewUIntSet(1), NewUIntSet(1), NewUIntSet(1)},
-		{NewUIntSet(1), NewUIntSet(2), NewUIntSet()},
-		{NewUIntSet(1), NewUIntSet(1, 2), NewUIntSet(1)},
-		{NewUIntSet(1, 2), NewUIntSet(1), NewUIntSet(1)},
+		{menge.NewUIntSet(), menge.NewUIntSet(), menge.NewUIntSet()},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1), menge.NewUIntSet(1)},
+		{menge.NewUIntSet(1), menge.NewUIntSet(2), menge.NewUIntSet()},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), menge.NewUIntSet(1)},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), menge.NewUIntSet(1)},
 	}
 	for _, c := range cases {
 		got := c.set.Intersection(c.arg)
@@ -253,15 +255,15 @@ func TestUIntSet_Intersection(t *testing.T) {
 
 func TestUIntSet_Difference(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
-		want UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
+		want menge.UIntSet
 	}{
-		{NewUIntSet(), NewUIntSet(), NewUIntSet()},
-		{NewUIntSet(1), NewUIntSet(1), NewUIntSet()},
-		{NewUIntSet(1), NewUIntSet(2), NewUIntSet(1)},
-		{NewUIntSet(1), NewUIntSet(1, 2), NewUIntSet()},
-		{NewUIntSet(1, 2), NewUIntSet(1), NewUIntSet(2)},
+		{menge.NewUIntSet(), menge.NewUIntSet(), menge.NewUIntSet()},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1), menge.NewUIntSet()},
+		{menge.NewUIntSet(1), menge.NewUIntSet(2), menge.NewUIntSet(1)},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), menge.NewUIntSet()},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), menge.NewUIntSet(2)},
 	}
 	for _, c := range cases {
 		got := c.set.Difference(c.arg)
@@ -273,14 +275,14 @@ func TestUIntSet_Difference(t *testing.T) {
 
 func TestUIntSet_IsSubsetOf(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
 		want bool
 	}{
-		{NewUIntSet(), NewUIntSet(), true},
-		{NewUIntSet(1), NewUIntSet(1), true},
-		{NewUIntSet(1), NewUIntSet(1, 2), true},
-		{NewUIntSet(1, 2), NewUIntSet(1), false},
+		{menge.NewUIntSet(), menge.NewUIntSet(), true},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1), true},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), true},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsSubsetOf(c.arg)
@@ -292,14 +294,14 @@ func TestUIntSet_IsSubsetOf(t *testing.T) {
 
 func TestUIntSet_IsProperSubsetOf(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
 		want bool
 	}{
-		{NewUIntSet(), NewUIntSet(), false},
-		{NewUIntSet(1), NewUIntSet(1), false},
-		{NewUIntSet(1), NewUIntSet(1, 2), true},
-		{NewUIntSet(1, 2), NewUIntSet(1), false},
+		{menge.NewUIntSet(), menge.NewUIntSet(), false},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1), false},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), true},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsProperSubsetOf(c.arg)
@@ -311,14 +313,14 @@ func TestUIntSet_IsProperSubsetOf(t *testing.T) {
 
 func TestUIntSet_IsSupersetOf(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
 		want bool
 	}{
-		{NewUIntSet(), NewUIntSet(), true},
-		{NewUIntSet(1), NewUIntSet(1), true},
-		{NewUIntSet(1), NewUIntSet(1, 2), false},
-		{NewUIntSet(1, 2), NewUIntSet(1), true},
+		{menge.NewUIntSet(), menge.NewUIntSet(), true},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1), true},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), false},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), true},
 	}
 	for _, c := range cases {
 		got := c.set.IsSupersetOf(c.arg)
@@ -330,14 +332,14 @@ func TestUIntSet_IsSupersetOf(t *testing.T) {
 
 func TestUIntSet_IsProperSupersetOf(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
 		want bool
 	}{
-		{NewUIntSet(), NewUIntSet(), false},
-		{NewUIntSet(1), NewUIntSet(1), false},
-		{NewUIntSet(1), NewUIntSet(1, 2), false},
-		{NewUIntSet(1, 2), NewUIntSet(1), true},
+		{menge.NewUIntSet(), menge.NewUIntSet(), false},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1), false},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), false},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), true},
 	}
 	for _, c := range cases {
 		got := c.set.IsProperSupersetOf(c.arg)
@@ -349,16 +351,16 @@ func TestUIntSet_IsProperSupersetOf(t *testing.T) {
 
 func TestUIntSet_IsDisjointFrom(t *testing.T) {
 	cases := []struct {
-		set  UIntSet
-		arg  UIntSet
+		set  menge.UIntSet
+		arg  menge.UIntSet
 		want bool
 	}{
-		{NewUIntSet(), NewUIntSet(), true},
-		{NewUIntSet(1), NewUIntSet(1), false},
-		{NewUIntSet(1), NewUIntSet(2, 3), true},
-		{NewUIntSet(1, 2), NewUIntSet(3), true},
-		{NewUIntSet(1), NewUIntSet(1, 2), false},
-		{NewUIntSet(1, 2), NewUIntSet(1), false},
+		{menge.NewUIntSet(), menge.NewUIntSet(), true},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1), false},
+		{menge.NewUIntSet(1), menge.NewUIntSet(2, 3), true},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(3), true},
+		{menge.NewUIntSet(1), menge.NewUIntSet(1, 2), false},
+		{menge.NewUIntSet(1, 2), menge.NewUIntSet(1), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsDisjointFrom(c.arg)

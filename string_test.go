@@ -1,20 +1,22 @@
-package menge
+package menge_test
 
 import (
 	"testing"
+
+	"github.com/soroushj/menge"
 )
 
 func TestNewStringSet(t *testing.T) {
 	cases := []struct {
 		arg  []string
-		want StringSet
+		want menge.StringSet
 	}{
-		{[]string{}, StringSet{}},
-		{[]string{"1", "1"}, StringSet{"1": struct{}{}}},
-		{[]string{"1", "2"}, StringSet{"1": struct{}{}, "2": struct{}{}}},
+		{[]string{}, menge.StringSet{}},
+		{[]string{"1", "1"}, menge.StringSet{"1": struct{}{}}},
+		{[]string{"1", "2"}, menge.StringSet{"1": struct{}{}, "2": struct{}{}}},
 	}
 	for _, c := range cases {
-		got := NewStringSet(c.arg...)
+		got := menge.NewStringSet(c.arg...)
 		if !got.Equals(c.want) {
 			t.Errorf("case: %v got: %v", c, got)
 		}
@@ -23,16 +25,16 @@ func TestNewStringSet(t *testing.T) {
 
 func TestStringSet_Add(t *testing.T) {
 	cases := []struct {
-		set  StringSet
+		set  menge.StringSet
 		arg  []string
-		want StringSet
+		want menge.StringSet
 	}{
-		{NewStringSet(), []string{}, NewStringSet()},
-		{NewStringSet(), []string{"1", "1"}, NewStringSet("1")},
-		{NewStringSet(), []string{"1", "2"}, NewStringSet("1", "2")},
-		{NewStringSet("1"), []string{}, NewStringSet("1")},
-		{NewStringSet("1"), []string{"1", "1"}, NewStringSet("1")},
-		{NewStringSet("1"), []string{"2", "3"}, NewStringSet("1", "2", "3")},
+		{menge.NewStringSet(), []string{}, menge.NewStringSet()},
+		{menge.NewStringSet(), []string{"1", "1"}, menge.NewStringSet("1")},
+		{menge.NewStringSet(), []string{"1", "2"}, menge.NewStringSet("1", "2")},
+		{menge.NewStringSet("1"), []string{}, menge.NewStringSet("1")},
+		{menge.NewStringSet("1"), []string{"1", "1"}, menge.NewStringSet("1")},
+		{menge.NewStringSet("1"), []string{"2", "3"}, menge.NewStringSet("1", "2", "3")},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -45,17 +47,17 @@ func TestStringSet_Add(t *testing.T) {
 
 func TestStringSet_Remove(t *testing.T) {
 	cases := []struct {
-		set  StringSet
+		set  menge.StringSet
 		arg  []string
-		want StringSet
+		want menge.StringSet
 	}{
-		{NewStringSet(), []string{}, NewStringSet()},
-		{NewStringSet("1"), []string{"1", "1"}, NewStringSet()},
-		{NewStringSet("1", "2"), []string{"1", "2"}, NewStringSet()},
-		{NewStringSet("1"), []string{}, NewStringSet("1")},
-		{NewStringSet("1"), []string{"1", "1"}, NewStringSet()},
-		{NewStringSet("1", "2"), []string{"3"}, NewStringSet("1", "2")},
-		{NewStringSet("1", "2", "3"), []string{"2", "3"}, NewStringSet("1")},
+		{menge.NewStringSet(), []string{}, menge.NewStringSet()},
+		{menge.NewStringSet("1"), []string{"1", "1"}, menge.NewStringSet()},
+		{menge.NewStringSet("1", "2"), []string{"1", "2"}, menge.NewStringSet()},
+		{menge.NewStringSet("1"), []string{}, menge.NewStringSet("1")},
+		{menge.NewStringSet("1"), []string{"1", "1"}, menge.NewStringSet()},
+		{menge.NewStringSet("1", "2"), []string{"3"}, menge.NewStringSet("1", "2")},
+		{menge.NewStringSet("1", "2", "3"), []string{"2", "3"}, menge.NewStringSet("1")},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -68,11 +70,11 @@ func TestStringSet_Remove(t *testing.T) {
 
 func TestStringSet_Empty(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		want StringSet
+		set  menge.StringSet
+		want menge.StringSet
 	}{
-		{NewStringSet(), NewStringSet()},
-		{NewStringSet("1", "2"), NewStringSet()},
+		{menge.NewStringSet(), menge.NewStringSet()},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet()},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -85,14 +87,14 @@ func TestStringSet_Empty(t *testing.T) {
 
 func TestStringSet_Has(t *testing.T) {
 	cases := []struct {
-		set  StringSet
+		set  menge.StringSet
 		arg  string
 		want bool
 	}{
-		{NewStringSet(), "1", false},
-		{NewStringSet("2"), "1", false},
-		{NewStringSet("1"), "1", true},
-		{NewStringSet("1", "2"), "1", true},
+		{menge.NewStringSet(), "1", false},
+		{menge.NewStringSet("2"), "1", false},
+		{menge.NewStringSet("1"), "1", true},
+		{menge.NewStringSet("1", "2"), "1", true},
 	}
 	for _, c := range cases {
 		got := c.set.Has(c.arg)
@@ -104,11 +106,11 @@ func TestStringSet_Has(t *testing.T) {
 
 func TestStringSet_Size(t *testing.T) {
 	cases := []struct {
-		set  StringSet
+		set  menge.StringSet
 		want int
 	}{
-		{NewStringSet(), 0},
-		{NewStringSet("1", "2"), 2},
+		{menge.NewStringSet(), 0},
+		{menge.NewStringSet("1", "2"), 2},
 	}
 	for _, c := range cases {
 		got := c.set.Size()
@@ -120,11 +122,11 @@ func TestStringSet_Size(t *testing.T) {
 
 func TestStringSet_IsEmpty(t *testing.T) {
 	cases := []struct {
-		set  StringSet
+		set  menge.StringSet
 		want bool
 	}{
-		{NewStringSet(), true},
-		{NewStringSet("1", "2"), false},
+		{menge.NewStringSet(), true},
+		{menge.NewStringSet("1", "2"), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsEmpty()
@@ -136,11 +138,11 @@ func TestStringSet_IsEmpty(t *testing.T) {
 
 func TestStringSet_Clone(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		want StringSet
+		set  menge.StringSet
+		want menge.StringSet
 	}{
-		{NewStringSet(), NewStringSet()},
-		{NewStringSet("1", "2"), NewStringSet("1", "2")},
+		{menge.NewStringSet(), menge.NewStringSet()},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1", "2")},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -152,15 +154,15 @@ func TestStringSet_Clone(t *testing.T) {
 
 func TestStringSet_AsSlice(t *testing.T) {
 	cases := []struct {
-		set  StringSet
+		set  menge.StringSet
 		want []string
 	}{
-		{NewStringSet(), []string{}},
-		{NewStringSet("1", "2"), []string{"1", "2"}},
+		{menge.NewStringSet(), []string{}},
+		{menge.NewStringSet("1", "2"), []string{"1", "2"}},
 	}
 	for _, c := range cases {
 		got := c.set.AsSlice()
-		if len(got) != len(c.want) || !NewStringSet(got...).Equals(NewStringSet(c.want...)) {
+		if len(got) != len(c.want) || !menge.NewStringSet(got...).Equals(menge.NewStringSet(c.want...)) {
 			t.Errorf("case: %v got: %v", c, got)
 		}
 	}
@@ -168,12 +170,12 @@ func TestStringSet_AsSlice(t *testing.T) {
 
 func TestStringSet_String(t *testing.T) {
 	cases := []struct {
-		set  StringSet
+		set  menge.StringSet
 		want []string
 	}{
-		{NewStringSet(), []string{"{}"}},
-		{NewStringSet("1"), []string{"{1}"}},
-		{NewStringSet("1", "2"), []string{"{1 2}", "{2 1}"}},
+		{menge.NewStringSet(), []string{"{}"}},
+		{menge.NewStringSet("1"), []string{"{1}"}},
+		{menge.NewStringSet("1", "2"), []string{"{1 2}", "{2 1}"}},
 	}
 	contains := func(ss []string, s string) bool {
 		for _, v := range ss {
@@ -193,15 +195,15 @@ func TestStringSet_String(t *testing.T) {
 
 func TestStringSet_Equals(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
 		want bool
 	}{
-		{NewStringSet(), NewStringSet(), true},
-		{NewStringSet("1", "2"), NewStringSet("2", "1"), true},
-		{NewStringSet("1", "2"), NewStringSet("1"), false},
-		{NewStringSet("1"), NewStringSet("1", "2"), false},
-		{NewStringSet("1"), NewStringSet("2"), false},
+		{menge.NewStringSet(), menge.NewStringSet(), true},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("2", "1"), true},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), false},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), false},
+		{menge.NewStringSet("1"), menge.NewStringSet("2"), false},
 	}
 	for _, c := range cases {
 		got := c.set.Equals(c.arg)
@@ -213,15 +215,15 @@ func TestStringSet_Equals(t *testing.T) {
 
 func TestStringSet_Union(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
-		want StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
+		want menge.StringSet
 	}{
-		{NewStringSet(), NewStringSet(), NewStringSet()},
-		{NewStringSet("1"), NewStringSet("1"), NewStringSet("1")},
-		{NewStringSet("1"), NewStringSet("2"), NewStringSet("1", "2")},
-		{NewStringSet("1"), NewStringSet("1", "2"), NewStringSet("1", "2")},
-		{NewStringSet("1", "2"), NewStringSet("1"), NewStringSet("1", "2")},
+		{menge.NewStringSet(), menge.NewStringSet(), menge.NewStringSet()},
+		{menge.NewStringSet("1"), menge.NewStringSet("1"), menge.NewStringSet("1")},
+		{menge.NewStringSet("1"), menge.NewStringSet("2"), menge.NewStringSet("1", "2")},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), menge.NewStringSet("1", "2")},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), menge.NewStringSet("1", "2")},
 	}
 	for _, c := range cases {
 		got := c.set.Union(c.arg)
@@ -233,15 +235,15 @@ func TestStringSet_Union(t *testing.T) {
 
 func TestStringSet_Intersection(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
-		want StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
+		want menge.StringSet
 	}{
-		{NewStringSet(), NewStringSet(), NewStringSet()},
-		{NewStringSet("1"), NewStringSet("1"), NewStringSet("1")},
-		{NewStringSet("1"), NewStringSet("2"), NewStringSet()},
-		{NewStringSet("1"), NewStringSet("1", "2"), NewStringSet("1")},
-		{NewStringSet("1", "2"), NewStringSet("1"), NewStringSet("1")},
+		{menge.NewStringSet(), menge.NewStringSet(), menge.NewStringSet()},
+		{menge.NewStringSet("1"), menge.NewStringSet("1"), menge.NewStringSet("1")},
+		{menge.NewStringSet("1"), menge.NewStringSet("2"), menge.NewStringSet()},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), menge.NewStringSet("1")},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), menge.NewStringSet("1")},
 	}
 	for _, c := range cases {
 		got := c.set.Intersection(c.arg)
@@ -253,15 +255,15 @@ func TestStringSet_Intersection(t *testing.T) {
 
 func TestStringSet_Difference(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
-		want StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
+		want menge.StringSet
 	}{
-		{NewStringSet(), NewStringSet(), NewStringSet()},
-		{NewStringSet("1"), NewStringSet("1"), NewStringSet()},
-		{NewStringSet("1"), NewStringSet("2"), NewStringSet("1")},
-		{NewStringSet("1"), NewStringSet("1", "2"), NewStringSet()},
-		{NewStringSet("1", "2"), NewStringSet("1"), NewStringSet("2")},
+		{menge.NewStringSet(), menge.NewStringSet(), menge.NewStringSet()},
+		{menge.NewStringSet("1"), menge.NewStringSet("1"), menge.NewStringSet()},
+		{menge.NewStringSet("1"), menge.NewStringSet("2"), menge.NewStringSet("1")},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), menge.NewStringSet()},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), menge.NewStringSet("2")},
 	}
 	for _, c := range cases {
 		got := c.set.Difference(c.arg)
@@ -273,14 +275,14 @@ func TestStringSet_Difference(t *testing.T) {
 
 func TestStringSet_IsSubsetOf(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
 		want bool
 	}{
-		{NewStringSet(), NewStringSet(), true},
-		{NewStringSet("1"), NewStringSet("1"), true},
-		{NewStringSet("1"), NewStringSet("1", "2"), true},
-		{NewStringSet("1", "2"), NewStringSet("1"), false},
+		{menge.NewStringSet(), menge.NewStringSet(), true},
+		{menge.NewStringSet("1"), menge.NewStringSet("1"), true},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), true},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsSubsetOf(c.arg)
@@ -292,14 +294,14 @@ func TestStringSet_IsSubsetOf(t *testing.T) {
 
 func TestStringSet_IsProperSubsetOf(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
 		want bool
 	}{
-		{NewStringSet(), NewStringSet(), false},
-		{NewStringSet("1"), NewStringSet("1"), false},
-		{NewStringSet("1"), NewStringSet("1", "2"), true},
-		{NewStringSet("1", "2"), NewStringSet("1"), false},
+		{menge.NewStringSet(), menge.NewStringSet(), false},
+		{menge.NewStringSet("1"), menge.NewStringSet("1"), false},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), true},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsProperSubsetOf(c.arg)
@@ -311,14 +313,14 @@ func TestStringSet_IsProperSubsetOf(t *testing.T) {
 
 func TestStringSet_IsSupersetOf(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
 		want bool
 	}{
-		{NewStringSet(), NewStringSet(), true},
-		{NewStringSet("1"), NewStringSet("1"), true},
-		{NewStringSet("1"), NewStringSet("1", "2"), false},
-		{NewStringSet("1", "2"), NewStringSet("1"), true},
+		{menge.NewStringSet(), menge.NewStringSet(), true},
+		{menge.NewStringSet("1"), menge.NewStringSet("1"), true},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), false},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), true},
 	}
 	for _, c := range cases {
 		got := c.set.IsSupersetOf(c.arg)
@@ -330,14 +332,14 @@ func TestStringSet_IsSupersetOf(t *testing.T) {
 
 func TestStringSet_IsProperSupersetOf(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
 		want bool
 	}{
-		{NewStringSet(), NewStringSet(), false},
-		{NewStringSet("1"), NewStringSet("1"), false},
-		{NewStringSet("1"), NewStringSet("1", "2"), false},
-		{NewStringSet("1", "2"), NewStringSet("1"), true},
+		{menge.NewStringSet(), menge.NewStringSet(), false},
+		{menge.NewStringSet("1"), menge.NewStringSet("1"), false},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), false},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), true},
 	}
 	for _, c := range cases {
 		got := c.set.IsProperSupersetOf(c.arg)
@@ -349,16 +351,16 @@ func TestStringSet_IsProperSupersetOf(t *testing.T) {
 
 func TestStringSet_IsDisjointFrom(t *testing.T) {
 	cases := []struct {
-		set  StringSet
-		arg  StringSet
+		set  menge.StringSet
+		arg  menge.StringSet
 		want bool
 	}{
-		{NewStringSet(), NewStringSet(), true},
-		{NewStringSet("1"), NewStringSet("1"), false},
-		{NewStringSet("1"), NewStringSet("2", "3"), true},
-		{NewStringSet("1", "2"), NewStringSet("3"), true},
-		{NewStringSet("1"), NewStringSet("1", "2"), false},
-		{NewStringSet("1", "2"), NewStringSet("1"), false},
+		{menge.NewStringSet(), menge.NewStringSet(), true},
+		{menge.NewStringSet("1"), menge.NewStringSet("1"), false},
+		{menge.NewStringSet("1"), menge.NewStringSet("2", "3"), true},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("3"), true},
+		{menge.NewStringSet("1"), menge.NewStringSet("1", "2"), false},
+		{menge.NewStringSet("1", "2"), menge.NewStringSet("1"), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsDisjointFrom(c.arg)

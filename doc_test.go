@@ -1,11 +1,13 @@
-package menge
+package menge_test
 
 import (
 	"fmt"
+
+	"github.com/soroushj/menge"
 )
 
 func Example() {
-	s := NewIntSet(1, 2, 3)
+	s := menge.NewIntSet(1, 2, 3)
 	fmt.Println("Set:", s)
 	for e := range s {
 		fmt.Println("Element:", e)
@@ -22,8 +24,8 @@ func Example() {
 	fmt.Println("Empty")
 	s.Empty()
 	fmt.Println("Is empty?", s.IsEmpty())
-	a := NewIntSet(1)
-	b := NewIntSet(1, 2)
+	a := menge.NewIntSet(1)
+	b := menge.NewIntSet(1, 2)
 	fmt.Printf("Does %v equal %v? %v\n", a, b, a.Equals(b))
 	fmt.Printf("Is %v a subset of %v? %v\n", a, b, a.IsSubsetOf(b))
 	fmt.Printf("Is %v a proper subset of %v? %v\n", a, b, a.IsProperSubsetOf(b))

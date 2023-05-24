@@ -1,20 +1,22 @@
-package menge
+package menge_test
 
 import (
 	"testing"
+
+	"github.com/soroushj/menge"
 )
 
 func TestNewUInt64Set(t *testing.T) {
 	cases := []struct {
 		arg  []uint64
-		want UInt64Set
+		want menge.UInt64Set
 	}{
-		{[]uint64{}, UInt64Set{}},
-		{[]uint64{1, 1}, UInt64Set{1: struct{}{}}},
-		{[]uint64{1, 2}, UInt64Set{1: struct{}{}, 2: struct{}{}}},
+		{[]uint64{}, menge.UInt64Set{}},
+		{[]uint64{1, 1}, menge.UInt64Set{1: struct{}{}}},
+		{[]uint64{1, 2}, menge.UInt64Set{1: struct{}{}, 2: struct{}{}}},
 	}
 	for _, c := range cases {
-		got := NewUInt64Set(c.arg...)
+		got := menge.NewUInt64Set(c.arg...)
 		if !got.Equals(c.want) {
 			t.Errorf("case: %v got: %v", c, got)
 		}
@@ -23,16 +25,16 @@ func TestNewUInt64Set(t *testing.T) {
 
 func TestUInt64Set_Add(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
+		set  menge.UInt64Set
 		arg  []uint64
-		want UInt64Set
+		want menge.UInt64Set
 	}{
-		{NewUInt64Set(), []uint64{}, NewUInt64Set()},
-		{NewUInt64Set(), []uint64{1, 1}, NewUInt64Set(1)},
-		{NewUInt64Set(), []uint64{1, 2}, NewUInt64Set(1, 2)},
-		{NewUInt64Set(1), []uint64{}, NewUInt64Set(1)},
-		{NewUInt64Set(1), []uint64{1, 1}, NewUInt64Set(1)},
-		{NewUInt64Set(1), []uint64{2, 3}, NewUInt64Set(1, 2, 3)},
+		{menge.NewUInt64Set(), []uint64{}, menge.NewUInt64Set()},
+		{menge.NewUInt64Set(), []uint64{1, 1}, menge.NewUInt64Set(1)},
+		{menge.NewUInt64Set(), []uint64{1, 2}, menge.NewUInt64Set(1, 2)},
+		{menge.NewUInt64Set(1), []uint64{}, menge.NewUInt64Set(1)},
+		{menge.NewUInt64Set(1), []uint64{1, 1}, menge.NewUInt64Set(1)},
+		{menge.NewUInt64Set(1), []uint64{2, 3}, menge.NewUInt64Set(1, 2, 3)},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -45,17 +47,17 @@ func TestUInt64Set_Add(t *testing.T) {
 
 func TestUInt64Set_Remove(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
+		set  menge.UInt64Set
 		arg  []uint64
-		want UInt64Set
+		want menge.UInt64Set
 	}{
-		{NewUInt64Set(), []uint64{}, NewUInt64Set()},
-		{NewUInt64Set(1), []uint64{1, 1}, NewUInt64Set()},
-		{NewUInt64Set(1, 2), []uint64{1, 2}, NewUInt64Set()},
-		{NewUInt64Set(1), []uint64{}, NewUInt64Set(1)},
-		{NewUInt64Set(1), []uint64{1, 1}, NewUInt64Set()},
-		{NewUInt64Set(1, 2), []uint64{3}, NewUInt64Set(1, 2)},
-		{NewUInt64Set(1, 2, 3), []uint64{2, 3}, NewUInt64Set(1)},
+		{menge.NewUInt64Set(), []uint64{}, menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1), []uint64{1, 1}, menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1, 2), []uint64{1, 2}, menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1), []uint64{}, menge.NewUInt64Set(1)},
+		{menge.NewUInt64Set(1), []uint64{1, 1}, menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1, 2), []uint64{3}, menge.NewUInt64Set(1, 2)},
+		{menge.NewUInt64Set(1, 2, 3), []uint64{2, 3}, menge.NewUInt64Set(1)},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -68,11 +70,11 @@ func TestUInt64Set_Remove(t *testing.T) {
 
 func TestUInt64Set_Empty(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		want UInt64Set
+		set  menge.UInt64Set
+		want menge.UInt64Set
 	}{
-		{NewUInt64Set(), NewUInt64Set()},
-		{NewUInt64Set(1, 2), NewUInt64Set()},
+		{menge.NewUInt64Set(), menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set()},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -85,14 +87,14 @@ func TestUInt64Set_Empty(t *testing.T) {
 
 func TestUInt64Set_Has(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
+		set  menge.UInt64Set
 		arg  uint64
 		want bool
 	}{
-		{NewUInt64Set(), 1, false},
-		{NewUInt64Set(2), 1, false},
-		{NewUInt64Set(1), 1, true},
-		{NewUInt64Set(1, 2), 1, true},
+		{menge.NewUInt64Set(), 1, false},
+		{menge.NewUInt64Set(2), 1, false},
+		{menge.NewUInt64Set(1), 1, true},
+		{menge.NewUInt64Set(1, 2), 1, true},
 	}
 	for _, c := range cases {
 		got := c.set.Has(c.arg)
@@ -104,11 +106,11 @@ func TestUInt64Set_Has(t *testing.T) {
 
 func TestUInt64Set_Size(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
+		set  menge.UInt64Set
 		want int
 	}{
-		{NewUInt64Set(), 0},
-		{NewUInt64Set(1, 2), 2},
+		{menge.NewUInt64Set(), 0},
+		{menge.NewUInt64Set(1, 2), 2},
 	}
 	for _, c := range cases {
 		got := c.set.Size()
@@ -120,11 +122,11 @@ func TestUInt64Set_Size(t *testing.T) {
 
 func TestUInt64Set_IsEmpty(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
+		set  menge.UInt64Set
 		want bool
 	}{
-		{NewUInt64Set(), true},
-		{NewUInt64Set(1, 2), false},
+		{menge.NewUInt64Set(), true},
+		{menge.NewUInt64Set(1, 2), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsEmpty()
@@ -136,11 +138,11 @@ func TestUInt64Set_IsEmpty(t *testing.T) {
 
 func TestUInt64Set_Clone(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		want UInt64Set
+		set  menge.UInt64Set
+		want menge.UInt64Set
 	}{
-		{NewUInt64Set(), NewUInt64Set()},
-		{NewUInt64Set(1, 2), NewUInt64Set(1, 2)},
+		{menge.NewUInt64Set(), menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1, 2)},
 	}
 	for _, c := range cases {
 		got := c.set.Clone()
@@ -152,15 +154,15 @@ func TestUInt64Set_Clone(t *testing.T) {
 
 func TestUInt64Set_AsSlice(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
+		set  menge.UInt64Set
 		want []uint64
 	}{
-		{NewUInt64Set(), []uint64{}},
-		{NewUInt64Set(1, 2), []uint64{1, 2}},
+		{menge.NewUInt64Set(), []uint64{}},
+		{menge.NewUInt64Set(1, 2), []uint64{1, 2}},
 	}
 	for _, c := range cases {
 		got := c.set.AsSlice()
-		if len(got) != len(c.want) || !NewUInt64Set(got...).Equals(NewUInt64Set(c.want...)) {
+		if len(got) != len(c.want) || !menge.NewUInt64Set(got...).Equals(menge.NewUInt64Set(c.want...)) {
 			t.Errorf("case: %v got: %v", c, got)
 		}
 	}
@@ -168,12 +170,12 @@ func TestUInt64Set_AsSlice(t *testing.T) {
 
 func TestUInt64Set_String(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
+		set  menge.UInt64Set
 		want []string
 	}{
-		{NewUInt64Set(), []string{"{}"}},
-		{NewUInt64Set(1), []string{"{1}"}},
-		{NewUInt64Set(1, 2), []string{"{1 2}", "{2 1}"}},
+		{menge.NewUInt64Set(), []string{"{}"}},
+		{menge.NewUInt64Set(1), []string{"{1}"}},
+		{menge.NewUInt64Set(1, 2), []string{"{1 2}", "{2 1}"}},
 	}
 	contains := func(ss []string, s string) bool {
 		for _, v := range ss {
@@ -193,15 +195,15 @@ func TestUInt64Set_String(t *testing.T) {
 
 func TestUInt64Set_Equals(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
 		want bool
 	}{
-		{NewUInt64Set(), NewUInt64Set(), true},
-		{NewUInt64Set(1, 2), NewUInt64Set(2, 1), true},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), false},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), false},
-		{NewUInt64Set(1), NewUInt64Set(2), false},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), true},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(2, 1), true},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), false},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), false},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(2), false},
 	}
 	for _, c := range cases {
 		got := c.set.Equals(c.arg)
@@ -213,15 +215,15 @@ func TestUInt64Set_Equals(t *testing.T) {
 
 func TestUInt64Set_Union(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
-		want UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
+		want menge.UInt64Set
 	}{
-		{NewUInt64Set(), NewUInt64Set(), NewUInt64Set()},
-		{NewUInt64Set(1), NewUInt64Set(1), NewUInt64Set(1)},
-		{NewUInt64Set(1), NewUInt64Set(2), NewUInt64Set(1, 2)},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), NewUInt64Set(1, 2)},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), NewUInt64Set(1, 2)},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1), menge.NewUInt64Set(1)},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(2), menge.NewUInt64Set(1, 2)},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1, 2)},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2)},
 	}
 	for _, c := range cases {
 		got := c.set.Union(c.arg)
@@ -233,15 +235,15 @@ func TestUInt64Set_Union(t *testing.T) {
 
 func TestUInt64Set_Intersection(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
-		want UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
+		want menge.UInt64Set
 	}{
-		{NewUInt64Set(), NewUInt64Set(), NewUInt64Set()},
-		{NewUInt64Set(1), NewUInt64Set(1), NewUInt64Set(1)},
-		{NewUInt64Set(1), NewUInt64Set(2), NewUInt64Set()},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), NewUInt64Set(1)},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), NewUInt64Set(1)},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1), menge.NewUInt64Set(1)},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(2), menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1)},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), menge.NewUInt64Set(1)},
 	}
 	for _, c := range cases {
 		got := c.set.Intersection(c.arg)
@@ -253,15 +255,15 @@ func TestUInt64Set_Intersection(t *testing.T) {
 
 func TestUInt64Set_Difference(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
-		want UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
+		want menge.UInt64Set
 	}{
-		{NewUInt64Set(), NewUInt64Set(), NewUInt64Set()},
-		{NewUInt64Set(1), NewUInt64Set(1), NewUInt64Set()},
-		{NewUInt64Set(1), NewUInt64Set(2), NewUInt64Set(1)},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), NewUInt64Set()},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), NewUInt64Set(2)},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1), menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(2), menge.NewUInt64Set(1)},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), menge.NewUInt64Set()},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), menge.NewUInt64Set(2)},
 	}
 	for _, c := range cases {
 		got := c.set.Difference(c.arg)
@@ -273,14 +275,14 @@ func TestUInt64Set_Difference(t *testing.T) {
 
 func TestUInt64Set_IsSubsetOf(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
 		want bool
 	}{
-		{NewUInt64Set(), NewUInt64Set(), true},
-		{NewUInt64Set(1), NewUInt64Set(1), true},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), true},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), false},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), true},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1), true},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), true},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsSubsetOf(c.arg)
@@ -292,14 +294,14 @@ func TestUInt64Set_IsSubsetOf(t *testing.T) {
 
 func TestUInt64Set_IsProperSubsetOf(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
 		want bool
 	}{
-		{NewUInt64Set(), NewUInt64Set(), false},
-		{NewUInt64Set(1), NewUInt64Set(1), false},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), true},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), false},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), false},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1), false},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), true},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsProperSubsetOf(c.arg)
@@ -311,14 +313,14 @@ func TestUInt64Set_IsProperSubsetOf(t *testing.T) {
 
 func TestUInt64Set_IsSupersetOf(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
 		want bool
 	}{
-		{NewUInt64Set(), NewUInt64Set(), true},
-		{NewUInt64Set(1), NewUInt64Set(1), true},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), false},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), true},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), true},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1), true},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), false},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), true},
 	}
 	for _, c := range cases {
 		got := c.set.IsSupersetOf(c.arg)
@@ -330,14 +332,14 @@ func TestUInt64Set_IsSupersetOf(t *testing.T) {
 
 func TestUInt64Set_IsProperSupersetOf(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
 		want bool
 	}{
-		{NewUInt64Set(), NewUInt64Set(), false},
-		{NewUInt64Set(1), NewUInt64Set(1), false},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), false},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), true},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), false},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1), false},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), false},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), true},
 	}
 	for _, c := range cases {
 		got := c.set.IsProperSupersetOf(c.arg)
@@ -349,16 +351,16 @@ func TestUInt64Set_IsProperSupersetOf(t *testing.T) {
 
 func TestUInt64Set_IsDisjointFrom(t *testing.T) {
 	cases := []struct {
-		set  UInt64Set
-		arg  UInt64Set
+		set  menge.UInt64Set
+		arg  menge.UInt64Set
 		want bool
 	}{
-		{NewUInt64Set(), NewUInt64Set(), true},
-		{NewUInt64Set(1), NewUInt64Set(1), false},
-		{NewUInt64Set(1), NewUInt64Set(2, 3), true},
-		{NewUInt64Set(1, 2), NewUInt64Set(3), true},
-		{NewUInt64Set(1), NewUInt64Set(1, 2), false},
-		{NewUInt64Set(1, 2), NewUInt64Set(1), false},
+		{menge.NewUInt64Set(), menge.NewUInt64Set(), true},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1), false},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(2, 3), true},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(3), true},
+		{menge.NewUInt64Set(1), menge.NewUInt64Set(1, 2), false},
+		{menge.NewUInt64Set(1, 2), menge.NewUInt64Set(1), false},
 	}
 	for _, c := range cases {
 		got := c.set.IsDisjointFrom(c.arg)
